@@ -2,19 +2,34 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 interface User {
   id: number
   name: string
   role: string
   avatar: string
+  tenantId: number
+}
+
+interface Application {
+  id: number
+  code: string
+  name: string
+  description: string
+  icon: string
+  features: Array<{
+    id: number
+    code: string
+    name: string
+  }>
+}
+
+interface UserApplication {
+  id: number
+  userId: number
+  tenantId: number
+  applicationIds: number[]
+  featureIds: number[]
 }
 
 interface AppCardProps {
@@ -26,100 +41,84 @@ interface AppCardProps {
 export default function DashboardPage() {
   const router = useRouter()
   const [user, setUser] = useState<User | null>(null)
-  const [applications, setApplications] = useState([])
-  const [userApplications, setUserApplications] = useState(null)
+  const [tenantApps, setTenantApps] = useState<Application[]>([])
+  const [userApps, setUserApps] = useState<UserApplication | null>(null)
 
   useEffect(() => {
-    // 从 localStorage 获取用户信息
     const userStr = localStorage.getItem('user')
     if (!userStr) {
       router.push('/login')
       return
     }
-    setUser(JSON.parse(userStr))
+    const user = JSON.parse(userStr)
+    setUser(user)
 
-    // 获取应用列表和用户权限
-    const fetchData = async () => {
+    // 获取租户应用信息
+    const fetchApps = async () => {
       try {
-        const appsResponse = await fetch('http://localhost:3100/applications')
-        const appsData = await appsResponse.json()
-        setApplications(appsData)
+        // 获取租户所有应用
+        const tenantResponse = await fetch(`http://localhost:3100/tenantApplications?tenantId=${user.tenantId}`)
+        const tenantData = await tenantResponse.json()
+        if (tenantData.length > 0) {
+          setTenantApps(tenantData[0].applications)
+        }
 
+        // 如果是教师，获取用户应用权限
         if (user.role === 'teacher') {
-          const userAppsResponse = await fetch(`http://localhost:3100/userApplications?userId=${user.id}`)
-          const userAppsData = await userAppsResponse.json()
-          setUserApplications(userAppsData[0])
+          const userResponse = await fetch(`http://localhost:3100/userApplications?userId=${user.id}`)
+          const userData = await userResponse.json()
+          if (userData.length > 0) {
+            setUserApps(userData[0])
+          }
         }
       } catch (error) {
         console.error('获取应用数据失败:', error)
       }
     }
 
-    if (user) {
-      fetchData()
-    }
+    fetchApps()
   }, [router])
-
-  const handleLogout = () => {
-    localStorage.removeItem('user')
-    router.push('/login')
-  }
 
   if (!user) return null
 
-  return (
-    <div className="min-h-screen bg-slate-50">
-      {/* 顶部导航栏 */}
-      <header className="h-16 bg-white shadow-sm flex items-center px-6 justify-between">
-        <h1 className="text-xl font-semibold">数智大脑工作台</h1>
-        <DropdownMenu>
-          <DropdownMenuTrigger>
-            <Avatar>
-              <AvatarImage src={user.avatar} />
-              <AvatarFallback>{user.name[0]}</AvatarFallback>
-            </Avatar>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem className="font-medium">{user.name}</DropdownMenuItem>
-            <DropdownMenuItem onClick={handleLogout}>退出登录</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </header>
+  const getAvailableApps = () => {
+    if (user.role === 'admin') {
+      return tenantApps
+    }
+    return tenantApps.filter(app => 
+      userApps?.applicationIds.includes(app.id) && 
+      app.code !== 'app_management'
+    )
+  }
 
-      {/* 工作台内容 */}
-      <main className="p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* 根据用户角色显示不同的应用卡片 */}
-          {user.role === 'admin' ? (
-            <>
-              <AppCard 
-                title="应用管理" 
-                description="管理教师用户的应用权限"
-                onClick={() => router.push('/dashboard/app-management')}
-              />
-              <AppCard title="系统设置" description="配置系统参数和功能" />
-              <AppCard title="数据统计" description="查看系统使用数据统计" />
-            </>
-          ) : (
-            <>
-              {applications
-                .filter(app => userApplications?.applicationIds.includes(app.id))
-                .map(app => (
-                  <AppCard
-                    key={app.id}
-                    title={app.name}
-                    description={app.description}
-                  />
-                ))}
-            </>
-          )}
-        </div>
-      </main>
+  // 根据应用类型跳转到不同路由
+  const handleAppClick = (app: Application) => {
+    switch (app.code) {
+      case 'app_management':
+        router.push('/dashboard/app-management')  // 不需要 appId
+        break
+      case 'unit_teaching':
+        router.push('/dashboard/unit-teaching')
+        break
+      default:
+        console.warn('未知的应用类型:', app.code)
+    }
+  }
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {getAvailableApps().map(app => (
+        <AppCard 
+          key={app.id}
+          title={app.name}
+          description={app.description}
+          onClick={() => handleAppClick(app)}
+        />
+      ))}
     </div>
   )
 }
 
-// 应用卡片组件
 function AppCard({ title, description, onClick }: AppCardProps) {
   return (
     <div 

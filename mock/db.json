@@ -4,6 +4,66 @@
     "/api/auth/login-phone\\?phone=:phone": "/users?phone=:phone",
     "/api/auth/send-code": "/verificationCodes"
   },
+  "tenants": [
+    {
+      "id": 1,
+      "name": "示例学校",
+      "code": "demo_school",
+      "status": "active",
+      "createdAt": "2024-02-21T08:00:00.000Z"
+    }
+  ],
+  "tenantApplications": [
+    {
+      "id": 1,
+      "tenantId": 1,
+      "applications": [
+        {
+          "id": 1,
+          "code": "app_management",
+          "name": "应用权限管理",
+          "description": "管理教师用户的应用权限",
+          "icon": "Settings",
+          "features": [
+            {
+              "id": 1,
+              "code": "view_apps",
+              "name": "查看应用"
+            },
+            {
+              "id": 2,
+              "code": "manage_permissions",
+              "name": "管理权限"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "code": "unit_teaching",
+          "name": "单元教学管理",
+          "description": "管理教学单元、课时和教案",
+          "icon": "BookOpen",
+          "features": [
+            {
+              "id": 3,
+              "code": "view_units",
+              "name": "查看单元"
+            },
+            {
+              "id": 4,
+              "code": "manage_units",
+              "name": "管理单元"
+            },
+            {
+              "id": 5,
+              "code": "manage_lessons",
+              "name": "管理课时"
+            }
+          ]
+        }
+      ]
+    }
+  ],
   "users": [
     {
       "id": 1,
@@ -11,17 +71,20 @@
       "password": "123456",
       "phone": "13800138000",
       "role": "admin",
-      "name": "管理员",
+      "name": "张天一",
+      "tenantId": 1,
       "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=admin"
     },
     {
       "id": 2,
-      "username": "teacher",
+      "username": "teacher1",
       "password": "123456",
       "phone": "13800138001",
       "role": "teacher",
-      "name": "张老师",
-      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=teacher"
+      "name": "曹玥",
+      "tenantId": 1,
+      "department": "语文组",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=teacher1"
     },
     {
       "id": 3,
@@ -30,43 +93,90 @@
       "phone": "13800138002",
       "role": "teacher",
       "name": "李老师",
+      "tenantId": 1,
+      "department": "数学组",
       "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=teacher2"
-    }
-  ],
-  "applications": [
-    {
-      "id": 1,
-      "code": "course_manage",
-      "name": "课程管理",
-      "description": "管理您的教学课程",
-      "icon": "BookOpen"
     },
     {
-      "id": 2,
-      "code": "student_manage",
-      "name": "学生管理",
-      "description": "查看学生信息和成绩",
-      "icon": "Users"
-    },
-    {
-      "id": 3,
-      "code": "resource_manage",
-      "name": "教学资源",
-      "description": "管理教学课件和资料",
-      "icon": "FileText"
+      "id": 4,
+      "username": "teacher3",
+      "password": "123456",
+      "phone": "13800138003",
+      "role": "teacher",
+      "name": "王老师",
+      "tenantId": 1,
+      "department": "英语组",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=teacher3"
     }
   ],
   "userApplications": [
     {
       "id": 1,
       "userId": 2,
-      "applicationIds": [1, 2]
+      "tenantId": 1,
+      "applicationIds": [2],
+      "featureIds": [3, 4, 5]
     },
     {
       "id": 2,
       "userId": 3,
-      "applicationIds": [1, 2, 3]
+      "tenantId": 1,
+      "applicationIds": [1, 2],
+      "featureIds": [1, 2, 3, 4, 5]
     }
   ],
-  "verificationCodes": []
+  "verificationCodes": [],
+  "teachingUnits": [
+    {
+      "id": 1,
+      "tenantId": 1,
+      "teacherId": 2,
+      "name": "第一单元：认识数字",
+      "subject": "数学",
+      "grade": "一年级",
+      "description": "帮助学生认识和掌握1-10的数字概念",
+      "createdAt": "2024-03-10T08:00:00.000Z",
+      "analysis": {
+        "standards": ["课程标准", "教材教学"],
+        "teachingGoals": ["认识1-10的数字", "理解数量关系"],
+        "prerequisites": ["能数数", "认识简单图形"],
+        "materials": ["数字卡片", "计数器"],
+        "competencies": {
+          "knowledge": true,
+          "skills": true,
+          "emotions": false,
+          "spaceAwareness": true,
+          "logicalThinking": true,
+          "practicalAbility": true,
+          "innovation": true
+        },
+        "content": {
+          "overview": "在具体情境中，回顾自己在学前阶段的数学学习活动，唤起数学学习经验，激发进一步学习数学的兴趣，养成良好习惯。",
+          "learningObjectives": "他比较清晰地描述幼儿园和学前生活中的数学活动内容，比较准确地表达自己对数、数量、关系、方位等数学概念的认识。"
+        }
+      }
+    }
+  ],
+  "teachingPlans": [
+    {
+      "id": 1,
+      "unitId": 1,
+      "name": "1-5数字教学",
+      "description": "通过游戏和实物认识1-5的数字",
+      "fileUrl": "/teaching-plans/sample.pdf",
+      "fileType": "pdf",
+      "uploadedAt": "2024-03-10T08:30:00.000Z",
+      "createdBy": 2
+    },
+    {
+      "id": 2,
+      "unitId": null,
+      "name": "课堂管理技巧",
+      "description": "小学课堂管理方法总结",
+      "fileUrl": "/teaching-plans/classroom.pdf",
+      "fileType": "pdf",
+      "uploadedAt": "2024-03-11T10:00:00.000Z",
+      "createdBy": 2
+    }
+  ]
 } 
