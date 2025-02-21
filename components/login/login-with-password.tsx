@@ -39,19 +39,21 @@ export function LoginWithPassword() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true)
     try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(values),
-      })
+      // 直接使用 json-server 的资源路径格式
+      const response = await fetch(`http://localhost:3100/users?username=${values.username}`)
+      const users = await response.json()
       
-      if (!response.ok) throw new Error('登录失败')
+      // 在前端验证密码
+      if (!users.length || users[0].password !== values.password) {
+        throw new Error('用户名或密码错误')
+      }
       
-      const data = await response.json()
-      // 登录成功，跳转到工作台
+      const user = users[0]
+      localStorage.setItem('user', JSON.stringify(user))
       router.push('/dashboard')
     } catch (error) {
       console.error(error)
+      form.setError('root', { message: '登录失败，请检查用户名和密码' })
     } finally {
       setIsLoading(false)
     }

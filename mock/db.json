@@ -1,0 +1,28 @@
+{
+  "_rewrite": {
+    "/api/auth/login\\?username=:username&password=:password": "/users?username=:username&password=:password",
+    "/api/auth/login-phone\\?phone=:phone": "/users?phone=:phone",
+    "/api/auth/send-code": "/verificationCodes"
+  },
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "password": "123456",
+      "phone": "13800138000",
+      "role": "admin",
+      "name": "管理员",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=admin"
+    },
+    {
+      "id": 2,
+      "username": "teacher",
+      "password": "123456",
+      "phone": "13800138001",
+      "role": "teacher",
+      "name": "张老师",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=teacher"
+    }
+  ],
+  "verificationCodes": []
+} 

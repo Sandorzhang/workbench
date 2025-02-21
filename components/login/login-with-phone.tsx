@@ -84,19 +84,20 @@ export function LoginWithPhone() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true)
     try {
-      const response = await fetch('/api/auth/login-phone', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(values),
-      })
+      // 直接使用 json-server 的资源路径格式
+      const response = await fetch(`http://localhost:3100/users?phone=${values.phone}`)
+      const users = await response.json()
       
-      if (!response.ok) throw new Error('登录失败')
+      if (!users.length) {
+        throw new Error('手机号未注册')
+      }
       
-      const data = await response.json()
-      // 登录成功，跳转到工作台
+      const user = users[0]
+      localStorage.setItem('user', JSON.stringify(user))
       router.push('/dashboard')
     } catch (error) {
       console.error(error)
+      form.setError('root', { message: '登录失败，请检查手机号和验证码' })
     } finally {
       setIsLoading(false)
     }

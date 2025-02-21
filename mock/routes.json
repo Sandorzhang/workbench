@@ -1,0 +1,5 @@
+{
+  "/api/auth/login": "/users?username=:username&password=:password",
+  "/api/auth/login-phone": "/users?phone=:phone",
+  "/api/auth/send-code": "/verificationCodes"
+} 
