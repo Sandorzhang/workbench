@@ -1,5 +1,6 @@
 'use client'
 
+import { use } from 'react'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -48,22 +49,23 @@ interface TeachingPlan {
   createdBy: number
 }
 
-export default function UnitDetailPage({ params }: { params: { unitId: string } }) {
+export default function UnitDetailPage({ params }: { params: Promise<{ unitId: string }> }) {
+  const resolvedParams = use(params)
   const router = useRouter()
   const [unit, setUnit] = useState<TeachingUnit | null>(null)
   const [plans, setPlans] = useState<TeachingPlan[]>([])
 
   useEffect(() => {
     loadData()
-  }, [params.unitId])
+  }, [resolvedParams.unitId])
 
   const loadData = async () => {
     try {
-      const unitResponse = await fetch(`http://localhost:3100/teachingUnits/${params.unitId}`)
+      const unitResponse = await fetch(`http://localhost:3100/teachingUnits/${resolvedParams.unitId}`)
       const unitData = await unitResponse.json()
       setUnit(unitData)
 
-      const plansResponse = await fetch(`http://localhost:3100/teachingPlans?unitId=${params.unitId}`)
+      const plansResponse = await fetch(`http://localhost:3100/teachingPlans?unitId=${resolvedParams.unitId}`)
       const plansData = await plansResponse.json()
       setPlans(plansData)
     } catch (error) {
