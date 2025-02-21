@@ -22,6 +22,50 @@
       "role": "teacher",
       "name": "张老师",
       "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=teacher"
+    },
+    {
+      "id": 3,
+      "username": "teacher2",
+      "password": "123456",
+      "phone": "13800138002",
+      "role": "teacher",
+      "name": "李老师",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=teacher2"
+    }
+  ],
+  "applications": [
+    {
+      "id": 1,
+      "code": "course_manage",
+      "name": "课程管理",
+      "description": "管理您的教学课程",
+      "icon": "BookOpen"
+    },
+    {
+      "id": 2,
+      "code": "student_manage",
+      "name": "学生管理",
+      "description": "查看学生信息和成绩",
+      "icon": "Users"
+    },
+    {
+      "id": 3,
+      "code": "resource_manage",
+      "name": "教学资源",
+      "description": "管理教学课件和资料",
+      "icon": "FileText"
+    }
+  ],
+  "userApplications": [
+    {
+      "id": 1,
+      "userId": 2,
+      "applicationIds": [1, 2]
+    },
+    {
+      "id": 2,
+      "userId": 3,
+      "applicationIds": [1, 2, 3]
     }
   ],
   "verificationCodes": []
