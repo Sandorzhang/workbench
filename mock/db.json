@@ -2,12 +2,15 @@
   "_rewrite": {
     "/api/auth/login\\?username=:username&password=:password": "/users?username=:username&password=:password",
     "/api/auth/login-phone\\?phone=:phone": "/users?phone=:phone",
-    "/api/auth/send-code": "/verificationCodes"
+    "/api/auth/send-code": "/verificationCodes",
+    "/api/user-applications": "/userApplications",
+    "/api/tenant-applications": "/tenantApplications",
+    "/api/academic-journeys": "/academicJourneys"
   },
   "tenants": [
     {
       "id": 1,
-      "name": "示例学校",
+      "name": "五十学校",
       "code": "demo_school",
       "status": "active",
       "createdAt": "2024-02-21T08:00:00.000Z"
@@ -20,7 +23,7 @@
       "applications": [
         {
           "id": 1,
-          "code": "app_management",
+          "code": "app-management",
           "name": "应用权限管理",
           "description": "管理教师用户的应用权限",
           "icon": "Settings",
@@ -39,7 +42,7 @@
         },
         {
           "id": 2,
-          "code": "unit_teaching",
+          "code": "unit-teaching",
           "name": "单元教学管理",
           "description": "管理教学单元、课时和教案",
           "icon": "BookOpen",
@@ -58,6 +61,49 @@
               "id": 5,
               "code": "manage_lessons",
               "name": "管理课时"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "code": "student-management",
+          "name": "学生管理",
+          "description": "管理学校的学生信息",
+          "icon": "Users",
+          "features": [
+            {
+              "id": 6,
+              "code": "view_students",
+              "name": "查看学生"
+            },
+            {
+              "id": 7,
+              "code": "manage_students",
+              "name": "管理学生"
+            },
+            {
+              "id": 8,
+              "code": "manage_classes",
+              "name": "管理班级"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "code": "academic-journey",
+          "name": "学业旅程",
+          "description": "管理学生的学业发展轨迹",
+          "icon": "BookOpen",
+          "features": [
+            {
+              "id": 9,
+              "code": "view_academic_journey",
+              "name": "查看学业旅程"
+            },
+            {
+              "id": 10,
+              "code": "manage_academic_journey",
+              "name": "管理学业旅程"
             }
           ]
         }
@@ -114,15 +160,56 @@
       "id": 1,
       "userId": 2,
       "tenantId": 1,
-      "applicationIds": [2],
-      "featureIds": [3, 4, 5]
+      "applicationIds": [
+        2,
+        4
+      ],
+      "featureIds": [
+        3,
+        4,
+        5,
+        9,
+        10
+      ]
     },
     {
       "id": 2,
       "userId": 3,
       "tenantId": 1,
-      "applicationIds": [1, 2],
-      "featureIds": [1, 2, 3, 4, 5]
+      "applicationIds": [
+        1,
+        2
+      ],
+      "featureIds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": 3,
+      "userId": 1,
+      "tenantId": 1,
+      "applicationIds": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "featureIds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ]
     }
   ],
   "verificationCodes": [],
@@ -137,10 +224,22 @@
       "description": "帮助学生认识和掌握1-10的数字概念",
       "createdAt": "2024-03-10T08:00:00.000Z",
       "analysis": {
-        "standards": ["课程标准", "教材教学"],
-        "teachingGoals": ["认识1-10的数字", "理解数量关系"],
-        "prerequisites": ["能数数", "认识简单图形"],
-        "materials": ["数字卡片", "计数器"],
+        "standards": [
+          "课程标准",
+          "教材教学"
+        ],
+        "teachingGoals": [
+          "认识1-10的数字",
+          "理解数量关系"
+        ],
+        "prerequisites": [
+          "能数数",
+          "认识简单图形"
+        ],
+        "materials": [
+          "数字卡片",
+          "计数器"
+        ],
         "competencies": {
           "knowledge": true,
           "skills": true,
@@ -178,5 +277,55 @@
       "uploadedAt": "2024-03-11T10:00:00.000Z",
       "createdBy": 2
     }
+  ],
+  "students": [],
+  "classes": [
+    {
+      "id": 1,
+      "tenantId": 1,
+      "name": "一年级1班",
+      "grade": "一年级",
+      "headTeacherId": 2,
+      "studentCount": 45,
+      "createdAt": "2023-09-01T00:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "tenantId": 1,
+      "name": "一年级2班",
+      "grade": "一年级",
+      "headTeacherId": 3,
+      "studentCount": 43,
+      "createdAt": "2023-09-01T00:00:00.000Z"
+    }
+  ],
+  "academicJourneys": [
+    {
+      "id": "1",
+      "studentName": "张三",
+      "grade": "高一",
+      "class": "1班",
+      "currentStatus": "正常",
+      "academicPerformance": "优秀",
+      "lastUpdated": "2024-03-20"
+    },
+    {
+      "id": "2",
+      "studentName": "李四",
+      "grade": "高二",
+      "class": "2班",
+      "currentStatus": "需要关注",
+      "academicPerformance": "良好",
+      "lastUpdated": "2024-03-19"
+    },
+    {
+      "id": "3",
+      "studentName": "王五",
+      "grade": "高三",
+      "class": "3班",
+      "currentStatus": "正常",
+      "academicPerformance": "优秀",
+      "lastUpdated": "2024-03-18"
+    }
   ]
-} 
+}
