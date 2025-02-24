@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { FileIcon, ArrowLeft, Plus } from 'lucide-react'
 import { toast } from "@/hooks/use-toast"
+import { KnowledgeStructure } from "@/components/unit-teaching/knowledge-structure"
 
 interface TeachingUnit {
   id: number
@@ -49,7 +50,11 @@ interface TeachingPlan {
   createdBy: number
 }
 
-export default function UnitDetailPage({ params }: { params: Promise<{ unitId: string }> }) {
+interface PageProps {
+  params: Promise<{ unitId: string }>
+}
+
+export default function UnitDetailPage({ params }: PageProps) {
   const resolvedParams = use(params)
   const router = useRouter()
   const [unit, setUnit] = useState<TeachingUnit | null>(null)
@@ -61,18 +66,27 @@ export default function UnitDetailPage({ params }: { params: Promise<{ unitId: s
 
   const loadData = async () => {
     try {
-      const unitResponse = await fetch(`http://localhost:3100/teachingUnits/${resolvedParams.unitId}`)
+      const unitId = parseInt(resolvedParams.unitId, 10)
+      console.log('Loading data for unit:', unitId)
+      
+      const unitResponse = await fetch(`http://localhost:3100/teachingUnits/${unitId}`)
+      if (!unitResponse.ok) {
+        throw new Error(`Failed to fetch unit: ${unitResponse.status}`)
+      }
       const unitData = await unitResponse.json()
       setUnit(unitData)
 
-      const plansResponse = await fetch(`http://localhost:3100/teachingPlans?unitId=${resolvedParams.unitId}`)
+      const plansResponse = await fetch(`http://localhost:3100/teachingPlans?unitId=${unitId}`)
+      if (!plansResponse.ok) {
+        throw new Error(`Failed to fetch plans: ${plansResponse.status}`)
+      }
       const plansData = await plansResponse.json()
       setPlans(plansData)
     } catch (error) {
       console.error('加载数据失败:', error)
       toast({
         title: "加载失败",
-        description: "获取单元教案数据失败",
+        description: error instanceof Error ? error.message : "获取单元教案数据失败",
         variant: "destructive",
       })
     }
@@ -93,87 +107,130 @@ export default function UnitDetailPage({ params }: { params: Promise<{ unitId: s
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon" onClick={handleBack}>
-          <ArrowLeft className="h-4 w-4" />
-        </Button>
-        <div>
-          <h1 className="text-2xl font-semibold">{unit.name}</h1>
-          <p className="text-muted-foreground">{unit.subject} | {unit.grade}</p>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Button variant="ghost" size="icon" onClick={handleBack}>
+            <ArrowLeft className="h-4 w-4" />
+          </Button>
+          <div>
+            <h1 className="text-2xl font-semibold">{unit.name}</h1>
+            <p className="text-muted-foreground">{unit.subject} | {unit.grade}</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button variant="outline">
+            <FileIcon className="h-4 w-4 mr-2" />
+            导出教案
+          </Button>
+          <Button>
+            <Plus className="h-4 w-4 mr-2" />
+            保存修改
+          </Button>
         </div>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>单元规划性质</CardTitle>
+          <CardTitle>基础信息</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-6">
-          <div>
-            <h3 className="font-medium mb-2">单元划分依据</h3>
-            <div className="grid grid-cols-2 gap-2">
-              <div className="flex items-center space-x-2">
-                <Checkbox id="standards" checked={unit.analysis.standards.includes('课程标准')} disabled />
-                <label htmlFor="standards">课程标准</label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="teaching" checked={unit.analysis.standards.includes('教材教学')} disabled />
-                <label htmlFor="teaching">教材教学</label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="cognitive" checked={unit.analysis.standards.includes('知识结构')} disabled />
-                <label htmlFor="cognitive">知识结构</label>
+        <CardContent className="grid gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div>
+              <h3 className="text-sm font-medium text-muted-foreground mb-1">学科</h3>
+              <p className="text-sm">{unit.subject}</p>
+            </div>
+            <div>
+              <h3 className="text-sm font-medium text-muted-foreground mb-1">年级</h3>
+              <p className="text-sm">{unit.grade}</p>
+            </div>
+            <div>
+              <h3 className="text-sm font-medium text-muted-foreground mb-1">创建时间</h3>
+              <p className="text-sm">{new Date(unit.createdAt).toLocaleDateString()}</p>
+            </div>
+            <div>
+              <h3 className="text-sm font-medium text-muted-foreground mb-1">状态</h3>
+              <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary text-primary-foreground">
+                进行中
               </div>
             </div>
           </div>
-
           <div>
-            <h3 className="font-medium mb-2">课程内容领域</h3>
-            <div className="grid grid-cols-2 gap-2">
-              <div className="flex items-center space-x-2">
-                <Checkbox id="numbers" checked disabled />
-                <label htmlFor="numbers">数与运算</label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="graphics" checked={false} disabled />
-                <label htmlFor="graphics">图形与几何</label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="statistics" checked={false} disabled />
-                <label htmlFor="statistics">统计与概率</label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="synthesis" checked disabled />
-                <label htmlFor="synthesis">综合与实践</label>
-              </div>
-            </div>
+            <h3 className="text-sm font-medium text-muted-foreground mb-1">单元描述</h3>
+            <p className="text-sm">{unit.description}</p>
           </div>
         </CardContent>
       </Card>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>教学目标</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <h3 className="text-sm font-medium mb-2">课程标准</h3>
+              <ul className="list-disc list-inside space-y-1">
+                {unit.analysis.standards.map((standard, index) => (
+                  <li key={index} className="text-sm text-muted-foreground">{standard}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-sm font-medium mb-2">教学目标</h3>
+              <ul className="list-disc list-inside space-y-1">
+                {unit.analysis.teachingGoals.map((goal, index) => (
+                  <li key={index} className="text-sm text-muted-foreground">{goal}</li>
+                ))}
+              </ul>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>教学准备</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <h3 className="text-sm font-medium mb-2">前置知识</h3>
+              <ul className="list-disc list-inside space-y-1">
+                {unit.analysis.prerequisites.map((prerequisite, index) => (
+                  <li key={index} className="text-sm text-muted-foreground">{prerequisite}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-sm font-medium mb-2">教学资源</h3>
+              <ul className="list-disc list-inside space-y-1">
+                {unit.analysis.materials.map((material, index) => (
+                  <li key={index} className="text-sm text-muted-foreground">{material}</li>
+                ))}
+              </ul>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
 
       <Card>
         <CardHeader>
           <CardTitle>核心素养</CardTitle>
         </CardHeader>
-        <CardContent className="grid grid-cols-2 gap-4">
-          <div className="flex items-center space-x-2">
-            <Checkbox id="knowledge" checked={unit.analysis.competencies.knowledge} disabled />
-            <label htmlFor="knowledge">数感</label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Checkbox id="skills" checked={unit.analysis.competencies.skills} disabled />
-            <label htmlFor="skills">运算能力</label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Checkbox id="logical" checked={unit.analysis.competencies.logicalThinking} disabled />
-            <label htmlFor="logical">推理意识</label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Checkbox id="space" checked={unit.analysis.competencies.spaceAwareness} disabled />
-            <label htmlFor="space">空间观念</label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Checkbox id="innovation" checked={unit.analysis.competencies.innovation} disabled />
-            <label htmlFor="innovation">创新意识</label>
+        <CardContent>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {Object.entries(unit.analysis.competencies).map(([key, value]) => (
+              <div key={key} className="flex items-center space-x-2">
+                <Checkbox checked={value} disabled />
+                <label className="text-sm">
+                  {key === 'knowledge' && '数感'}
+                  {key === 'skills' && '运算能力'}
+                  {key === 'emotions' && '情感态度'}
+                  {key === 'spaceAwareness' && '空间观念'}
+                  {key === 'logicalThinking' && '推理意识'}
+                  {key === 'practicalAbility' && '实践能力'}
+                  {key === 'innovation' && '创新意识'}
+                </label>
+              </div>
+            ))}
           </div>
         </CardContent>
       </Card>
@@ -182,17 +239,19 @@ export default function UnitDetailPage({ params }: { params: Promise<{ unitId: s
         <CardHeader>
           <CardTitle>课程内容</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-6">
           <div>
-            <h3 className="font-medium mb-2">内容要求</h3>
-            <p className="text-sm text-muted-foreground">{unit.analysis.content.overview}</p>
+            <h3 className="text-sm font-medium text-muted-foreground mb-2">内容概述</h3>
+            <p className="text-sm">{unit.analysis.content.overview}</p>
           </div>
           <div>
-            <h3 className="font-medium mb-2">学业要求</h3>
-            <p className="text-sm text-muted-foreground">{unit.analysis.content.learningObjectives}</p>
+            <h3 className="text-sm font-medium text-muted-foreground mb-2">学习目标</h3>
+            <p className="text-sm">{unit.analysis.content.learningObjectives}</p>
           </div>
         </CardContent>
       </Card>
+
+      {unit && <KnowledgeStructure unitId={unit.id} />}
 
       <Card>
         <CardHeader>
@@ -204,21 +263,34 @@ export default function UnitDetailPage({ params }: { params: Promise<{ unitId: s
             </Button>
           </div>
         </CardHeader>
-        <CardContent className="space-y-4">
-          {plans.map(plan => (
-            <div key={plan.id} className="flex items-center justify-between p-4 border rounded-lg">
-              <div className="flex items-center gap-3">
-                <FileIcon className="h-5 w-5 text-muted-foreground" />
-                <div>
-                  <h4 className="font-medium">{plan.name}</h4>
-                  <p className="text-sm text-muted-foreground">
-                    上传时间：{new Date(plan.uploadedAt).toLocaleString()}
-                  </p>
+        <CardContent>
+          <div className="grid gap-4">
+            {plans.map(plan => (
+              <div key={plan.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-primary/10 rounded">
+                    <FileIcon className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <h4 className="font-medium">{plan.name}</h4>
+                    <p className="text-sm text-muted-foreground">
+                      上传时间：{new Date(plan.uploadedAt).toLocaleString()}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => router.push(`/dashboard/unit-teaching/unit/${unit.id}/plan/${plan.id}`)}
+                  >
+                    预览
+                  </Button>
+                  <Button variant="outline" size="sm">下载</Button>
                 </div>
               </div>
-              <Button variant="outline">预览</Button>
-            </div>
-          ))}
+            ))}
+          </div>
         </CardContent>
       </Card>
     </div>

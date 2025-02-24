@@ -5,15 +5,20 @@
     "/api/auth/send-code": "/verificationCodes",
     "/api/user-applications": "/userApplications",
     "/api/tenant-applications": "/tenantApplications",
-    "/api/academic-journeys": "/academicJourneys"
+    "/api/academic-journeys": "/academicJourneys",
+    "/api/classroom-moments": "/classroomMoments",
+    "/api/classroom-moments/:id": "/classroomMoments/:id"
   },
   "tenants": [
     {
       "id": 1,
-      "name": "五十学校",
-      "code": "demo_school",
-      "status": "active",
-      "createdAt": "2024-02-21T08:00:00.000Z"
+      "name": "上海市长宁区天山第二小学",
+      "shortName": "天二小",
+      "code": "TSXX",
+      "type": "PRIMARY_SCHOOL",
+      "address": "上海市长宁区天山路600号",
+      "phone": "021-12345678",
+      "logo": "https://api.dicebear.com/7.x/shapes/svg?seed=school1"
     }
   ],
   "tenantApplications": [
@@ -106,6 +111,102 @@
               "name": "管理学业旅程"
             }
           ]
+        },
+        {
+          "id": 5,
+          "code": "chinese-writing",
+          "name": "语文单元习作",
+          "description": "管理语文单元习作教学和批改",
+          "icon": "PenTool",
+          "features": [
+            {
+              "id": 12,
+              "code": "view_writings",
+              "name": "查看习作"
+            },
+            {
+              "id": 13,
+              "code": "manage_writings",
+              "name": "管理习作"
+            },
+            {
+              "id": 14,
+              "code": "grade_writings",
+              "name": "批改习作"
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "code": "classroom-moments",
+          "name": "课堂时光机",
+          "description": "记录和分享精彩课堂瞬间",
+          "icon": "Camera",
+          "features": [
+            {
+              "id": 15,
+              "code": "view_moments",
+              "name": "查看课堂记录"
+            },
+            {
+              "id": 16,
+              "code": "create_moments",
+              "name": "创建课堂记录"
+            },
+            {
+              "id": 17,
+              "code": "share_moments",
+              "name": "分享课堂记录"
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "code": "class-schedule",
+          "name": "课表管理",
+          "description": "管理班级课程表和教师课表",
+          "icon": "Calendar",
+          "features": [
+            {
+              "id": 18,
+              "code": "view_schedules",
+              "name": "查看课表"
+            },
+            {
+              "id": 19,
+              "code": "manage_schedules",
+              "name": "管理课表"
+            },
+            {
+              "id": 20,
+              "code": "export_schedules",
+              "name": "导出课表"
+            }
+          ]
+        },
+        {
+          "id": 8,
+          "code": "data-category",
+          "name": "数据类目",
+          "description": "管理教学相关的数据类目",
+          "icon": "Database",
+          "features": [
+            {
+              "id": 21,
+              "code": "view_categories",
+              "name": "查看类目"
+            },
+            {
+              "id": 22,
+              "code": "manage_categories",
+              "name": "管理类目"
+            },
+            {
+              "id": 23,
+              "code": "export_categories",
+              "name": "导出类目"
+            }
+          ]
         }
       ]
     }
@@ -162,14 +263,30 @@
       "tenantId": 1,
       "applicationIds": [
         2,
-        4
+        4,
+        5,
+        6,
+        7,
+        8
       ],
       "featureIds": [
         3,
         4,
         5,
         9,
-        10
+        10,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23
       ]
     },
     {
@@ -178,14 +295,22 @@
       "tenantId": 1,
       "applicationIds": [
         1,
-        2
+        2,
+        7,
+        8
       ],
       "featureIds": [
         1,
         2,
         3,
         4,
-        5
+        5,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23
       ]
     },
     {
@@ -196,7 +321,9 @@
         1,
         2,
         3,
-        4
+        4,
+        5,
+        6
       ],
       "featureIds": [
         1,
@@ -208,7 +335,13 @@
         7,
         8,
         9,
-        10
+        10,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
       ]
     }
   ],
@@ -216,42 +349,29 @@
   "teachingUnits": [
     {
       "id": 1,
-      "tenantId": 1,
-      "teacherId": 2,
-      "name": "第一单元：认识数字",
+      "name": "认识数",
       "subject": "数学",
       "grade": "一年级",
-      "description": "帮助学生认识和掌握1-10的数字概念",
-      "createdAt": "2024-03-10T08:00:00.000Z",
+      "description": "通过具体的情境，认识100以内的数",
+      "createdAt": "2024-02-24T10:00:00Z",
+      "teacherId": 1,
       "analysis": {
-        "standards": [
-          "课程标准",
-          "教材教学"
-        ],
-        "teachingGoals": [
-          "认识1-10的数字",
-          "理解数量关系"
-        ],
-        "prerequisites": [
-          "能数数",
-          "认识简单图形"
-        ],
-        "materials": [
-          "数字卡片",
-          "计数器"
-        ],
+        "standards": ["课程标准", "教材教学"],
+        "teachingGoals": ["理解数的概念", "掌握数的读写方法"],
+        "prerequisites": ["能数20以内的物品"],
+        "materials": ["数字卡片", "计数器"],
         "competencies": {
           "knowledge": true,
           "skills": true,
           "emotions": false,
-          "spaceAwareness": true,
+          "spaceAwareness": false,
           "logicalThinking": true,
           "practicalAbility": true,
-          "innovation": true
+          "innovation": false
         },
         "content": {
-          "overview": "在具体情境中，回顾自己在学前阶段的数学学习活动，唤起数学学习经验，激发进一步学习数学的兴趣，养成良好习惯。",
-          "learningObjectives": "他比较清晰地描述幼儿园和学前生活中的数学活动内容，比较准确地表达自己对数、数量、关系、方位等数学概念的认识。"
+          "overview": "本单元主要学习100以内数的认识",
+          "learningObjectives": "能够读写100以内的数，理解数的含义"
         }
       }
     }
@@ -303,8 +423,8 @@
     {
       "id": "1",
       "studentName": "张三",
-      "grade": "高一",
-      "class": "1班",
+      "grade": "五年级",
+      "class": "2班",
       "currentStatus": "正常",
       "academicPerformance": "优秀",
       "lastUpdated": "2024-03-20"
@@ -312,7 +432,7 @@
     {
       "id": "2",
       "studentName": "李四",
-      "grade": "高二",
+      "grade": "五年级",
       "class": "2班",
       "currentStatus": "需要关注",
       "academicPerformance": "良好",
@@ -321,11 +441,1167 @@
     {
       "id": "3",
       "studentName": "王五",
-      "grade": "高三",
-      "class": "3班",
+      "grade": "五年级",
+      "class": "2班",
       "currentStatus": "正常",
-      "academicPerformance": "优秀",
+      "academicPerformance": "良好",
       "lastUpdated": "2024-03-18"
+    }
+  ],
+  "chineseWritings": [
+    {
+      "id": "1",
+      "title": "我的理想",
+      "grade": "五年级",
+      "class": "1班",
+      "unit": "第一单元",
+      "status": "进行中",
+      "deadline": "2024-04-01",
+      "submissionCount": 35,
+      "totalCount": 45
+    },
+    {
+      "id": "2",
+      "title": "难忘的一天",
+      "grade": "五年级",
+      "class": "2班",
+      "unit": "第二单元",
+      "status": "已完成",
+      "deadline": "2024-03-15",
+      "submissionCount": 42,
+      "totalCount": 42
+    }
+  ],
+  "classroomMoments": [
+    {
+      "id": "1",
+      "title": "数学思维训练",
+      "teacher": "曹玲",
+      "subject": "数学",
+      "grade": "五年级",
+      "class": "1班",
+      "date": "2024-03-20",
+      "description": "今天的数学课上，同学们通过小组讨论的方式，共同解决了一个复杂的应用题。看到大家积极思考、互相帮助的样子，非常欣慰。",
+      "tags": [
+        "小组讨论",
+        "解题技巧",
+        "团队协作"
+      ],
+      "imageUrl": "https://picsum.photos/400/300",
+      "likes": 15,
+      "comments": 5,
+      "sections": [
+        {
+          "name": "准备环节",
+          "duration": "10分钟",
+          "activities": [
+            "复习前置知识",
+            "分组安排",
+            "明确任务目标"
+          ]
+        },
+        {
+          "name": "探究环节",
+          "duration": "25分钟",
+          "activities": [
+            "阅读理解题目",
+            "小组讨论分析",
+            "尝试解决问题",
+            "交流解题思路"
+          ]
+        },
+        {
+          "name": "总结环节",
+          "duration": "10分钟",
+          "activities": [
+            "展示解题过程",
+            "点评指导",
+            "归纳方法"
+          ]
+        }
+      ],
+      "knowledgeMap": [
+        {
+          "topic": "应用题解题策略",
+          "concepts": [
+            "数据分析",
+            "逻辑推理",
+            "数学建模",
+            "验证检查"
+          ]
+        },
+        {
+          "topic": "团队协作能力",
+          "concepts": [
+            "表达能力",
+            "倾听能力",
+            "总结能力"
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": "q1",
+          "type": "引入问题",
+          "content": "如何分析复杂应用题中的关键信息？"
+        },
+        {
+          "id": "q2",
+          "type": "探究问题",
+          "content": "遇到困难时，如何寻求同学的帮助？"
+        }
+      ],
+      "tasks": [
+        {
+          "content": "完成课后练习第1-3题",
+          "status": "进行中"
+        },
+        {
+          "content": "整理本节课笔记",
+          "status": "已完成"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "title": "科学实验课",
+      "teacher": "李老师",
+      "subject": "科学",
+      "grade": "五年级",
+      "class": "2班",
+      "date": "2024-03-19",
+      "description": "通过简单的材料，同学们亲手制作了小型火山模型，并进行了火山喷发实验。看到大家脸上既有紧张又有期待的表情，真是难忘的一课。",
+      "tags": [
+        "实验课",
+        "动手实践",
+        "科学探索"
+      ],
+      "imageUrl": "https://picsum.photos/400/300",
+      "likes": 20,
+      "comments": 8,
+      "sections": [
+        {
+          "name": "准备环节",
+          "duration": "10分钟",
+          "activities": [
+            "介绍实验安全注意事项",
+            "分发实验材料",
+            "讲解实验步骤"
+          ]
+        },
+        {
+          "name": "实验环节",
+          "duration": "25分钟",
+          "activities": [
+            "制作火山模型",
+            "准备火山喷发材料",
+            "进行喷发实验",
+            "观察记录实验现象"
+          ]
+        },
+        {
+          "name": "总结环节",
+          "duration": "10分钟",
+          "activities": [
+            "分享实验体会",
+            "讲解火山喷发原理",
+            "布置课后任务"
+          ]
+        }
+      ],
+      "knowledgeMap": [
+        {
+          "topic": "火山喷发原理",
+          "concepts": [
+            "化学反应",
+            "气体膨胀",
+            "压强变化",
+            "物质变化"
+          ]
+        },
+        {
+          "topic": "实验技能",
+          "concepts": [
+            "安全意识",
+            "操作规范",
+            "观察能力",
+            "记录方法"
+          ]
+        },
+        {
+          "topic": "科学探究",
+          "concepts": [
+            "猜想验证",
+            "现象分析",
+            "原理解释"
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": "q3",
+          "type": "思考问题",
+          "content": "为什么分母相同的分数可以直接进行加减运算？"
+        },
+        {
+          "id": "q4",
+          "type": "应用问题",
+          "content": "小明吃了3/8个蛋糕，小红吃了2/8个蛋糕，他们一共吃了多少？"
+        },
+        {
+          "id": "q5",
+          "type": "拓展问题",
+          "content": "如果分母不同，我们应该如何进行分数的加减运算？"
+        }
+      ],
+      "tasks": [
+        {
+          "content": "完成实验报告",
+          "status": "进行中"
+        },
+        {
+          "content": "收集火山喷发的相关资料",
+          "status": "未开始"
+        },
+        {
+          "content": "整理实验笔记",
+          "status": "已完成"
+        }
+      ]
+    },
+    {
+      "id": "tOdbaU0"
+    },
+    {
+      "id": "1740375957577",
+      "title": "英语测试",
+      "subject": "英语",
+      "grade": "3",
+      "class": "3",
+      "description": "3",
+      "date": "2025-02-24",
+      "tags": [
+        "123"
+      ],
+      "imageUrl": "https://picsum.photos/400/300",
+      "likes": 0,
+      "comments": 0,
+      "sections": [
+        {
+          "name": "课前准备",
+          "duration": "5分钟",
+          "activities": [
+            "明确学习目标",
+            "激发学习兴趣",
+            "创设学习情境"
+          ]
+        },
+        {
+          "name": "知识讲解",
+          "duration": "20分钟",
+          "activities": [
+            "讲解重点内容",
+            "师生互动交流",
+            "及时检查反馈"
+          ]
+        },
+        {
+          "name": "课堂实践",
+          "duration": "20分钟",
+          "activities": [
+            "学生独立思考",
+            "小组合作学习",
+            "展示交流成果"
+          ]
+        }
+      ],
+      "knowledgeMap": [
+        {
+          "topic": "基础知识",
+          "concepts": [
+            "核心概念",
+            "基本原理",
+            "重要方法"
+          ]
+        },
+        {
+          "topic": "能力培养",
+          "concepts": [
+            "思维能力",
+            "实践能力",
+            "创新能力"
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": "q6",
+          "type": "练习问题",
+          "content": "计算：5/12 + 3/12 = ?"
+        },
+        {
+          "id": "q7",
+          "type": "实践问题",
+          "content": "用分数表示班级中男生和女生的比例，并进行加法验证是否等于1。"
+        },
+        {
+          "id": "q8",
+          "type": "深入问题",
+          "content": "为什么1/2 + 1/3不能直接写成2/5？"
+        }
+      ],
+      "tasks": [
+        {
+          "content": "完成课后作业",
+          "status": "进行中"
+        },
+        {
+          "content": "整理学习笔记",
+          "status": "未开始"
+        }
+      ]
+    },
+    {
+      "id": "1740376157800",
+      "title": "测试",
+      "subject": "英语",
+      "grade": "三年级",
+      "class": "1班",
+      "description": "英语课",
+      "date": "2025-02-24",
+      "tags": [
+        "123"
+      ],
+      "imageUrl": "https://picsum.photos/seed/1740376157800/400/300",
+      "likes": 0,
+      "comments": 0,
+      "teacher": "曹玲",
+      "sections": [
+        {
+          "name": "课前准备",
+          "duration": "5分钟",
+          "activities": [
+            "明确学习目标",
+            "激发学习兴趣",
+            "创设学习情境"
+          ]
+        },
+        {
+          "name": "知识讲解",
+          "duration": "20分钟",
+          "activities": [
+            "讲解重点内容",
+            "师生互动交流",
+            "及时检查反馈"
+          ]
+        },
+        {
+          "name": "课堂实践",
+          "duration": "20分钟",
+          "activities": [
+            "学生独立思考",
+            "小组合作学习",
+            "展示交流成果"
+          ]
+        }
+      ],
+      "knowledgeMap": [
+        {
+          "topic": "基础知识",
+          "concepts": [
+            "核心概念",
+            "基本原理",
+            "重要方法"
+          ]
+        },
+        {
+          "topic": "能力培养",
+          "concepts": [
+            "思维能力",
+            "实践能力",
+            "创新能力"
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": "q9",
+          "type": "总结问题",
+          "content": "同分母分数加减法的关键步骤是什么？"
+        },
+        {
+          "id": "q10",
+          "type": "挑战问题",
+          "content": "如何用分数加减解决实际生活中的问题？"
+        },
+        {
+          "id": "q11",
+          "type": "反思问题",
+          "content": "学习分数加减法对我们有什么帮助？"
+        }
+      ],
+      "tasks": [
+        {
+          "content": "完成课后作业",
+          "status": "进行中"
+        },
+        {
+          "content": "整理学习笔记",
+          "status": "未开始"
+        }
+      ]
+    },
+    {
+      "id": "1740376269364",
+      "title": "物理测试",
+      "subject": "物理",
+      "grade": "三年级",
+      "class": "2班",
+      "description": "1123",
+      "date": "2025-02-24",
+      "tags": [
+        "123"
+      ],
+      "imageUrl": "https://picsum.photos/seed/1740376269364/400/300",
+      "likes": 0,
+      "comments": 0,
+      "teacher": "曹玲",
+      "analysisStatus": "completed",
+      "sections": [
+        {
+          "name": "课前准备",
+          "duration": "5分钟",
+          "activities": [
+            "明确学习目标",
+            "激发学习兴趣",
+            "创设学习情境"
+          ]
+        },
+        {
+          "name": "知识讲解",
+          "duration": "20分钟",
+          "activities": [
+            "讲解重点内容",
+            "师生互动交流",
+            "及时检查反馈"
+          ]
+        },
+        {
+          "name": "课堂实践",
+          "duration": "20分钟",
+          "activities": [
+            "学生独立思考",
+            "小组合作学习",
+            "展示交流成果"
+          ]
+        }
+      ],
+      "knowledgeMap": [
+        {
+          "topic": "基础知识",
+          "concepts": [
+            "核心概念",
+            "基本原理",
+            "重要方法"
+          ]
+        },
+        {
+          "topic": "能力培养",
+          "concepts": [
+            "思维能力",
+            "实践能力",
+            "创新能力"
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": "q12",
+          "type": "连接问题",
+          "content": "分数加减法与小数加减法有什么联系？"
+        },
+        {
+          "id": "q13",
+          "type": "创新问题",
+          "content": "能否创造一个生活中的例子来说明分数加减的应用？"
+        },
+        {
+          "id": "q14",
+          "type": "评价问题",
+          "content": "如何判断分数加减计算的结果是否正确？"
+        }
+      ],
+      "tasks": [
+        {
+          "content": "完成课后作业",
+          "status": "进行中"
+        },
+        {
+          "content": "整理学习笔记",
+          "status": "未开始"
+        }
+      ]
+    },
+    {
+      "id": "1740377661491",
+      "title": "英语",
+      "subject": "英语",
+      "grade": "三年级",
+      "class": "1班",
+      "description": "123",
+      "date": "2025-02-24",
+      "tags": [
+        "英语"
+      ],
+      "imageUrl": "https://picsum.photos/seed/1740377661491/400/300",
+      "likes": 0,
+      "comments": 0,
+      "teacher": "曹玲",
+      "analysisStatus": "completed",
+      "sections": [
+        {
+          "name": "课前准备",
+          "duration": "5分钟",
+          "activities": [
+            "明确学习目标",
+            "激发学习兴趣",
+            "创设学习情境"
+          ]
+        },
+        {
+          "name": "知识讲解",
+          "duration": "20分钟",
+          "activities": [
+            "讲解重点内容",
+            "师生互动交流",
+            "及时检查反馈"
+          ]
+        },
+        {
+          "name": "课堂实践",
+          "duration": "20分钟",
+          "activities": [
+            "学生独立思考",
+            "小组合作学习",
+            "展示交流成果"
+          ]
+        }
+      ],
+      "knowledgeMap": [
+        {
+          "topic": "基础知识",
+          "concepts": [
+            "核心概念",
+            "基本原理",
+            "重要方法"
+          ]
+        },
+        {
+          "topic": "能力培养",
+          "concepts": [
+            "思维能力",
+            "实践能力",
+            "创新能力"
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": "q15",
+          "type": "迁移问题",
+          "content": "学完分数加减，对学习分数乘除有什么启示？"
+        },
+        {
+          "id": "q16",
+          "type": "练习问题",
+          "content": "计算：5/12 + 3/12 = ?"
+        },
+        {
+          "id": "q17",
+          "type": "实践问题",
+          "content": "用分数表示班级中男生和女生的比例，并进行加法验证是否等于1。"
+        }
+      ],
+      "tasks": [
+        {
+          "content": "完成课后作业",
+          "status": "进行中"
+        },
+        {
+          "content": "整理学习笔记",
+          "status": "未开始"
+        }
+      ]
+    },
+    {
+      "id": "1740378756308",
+      "title": "曲阳四小数学公开课-不规则物体的体积",
+      "subject": "数学",
+      "grade": "三年级",
+      "class": "1班",
+      "description": "第一节公开课",
+      "date": "2025-02-24",
+      "tags": [
+        "互动式课堂教学"
+      ],
+      "imageUrl": "https://picsum.photos/seed/1740378756308/400/300",
+      "likes": 0,
+      "comments": 0,
+      "teacher": "曹玲",
+      "analysisStatus": "completed",
+      "sections": [
+        {
+          "name": "导入环节",
+          "duration": "10分钟",
+          "activities": [
+            "复习前置知识点",
+            "创设问题情境",
+            "引导学生思考"
+          ]
+        },
+        {
+          "name": "探究环节",
+          "duration": "20分钟",
+          "activities": [
+            "小组合作探究",
+            "交流研讨",
+            "归纳总结"
+          ]
+        },
+        {
+          "name": "巩固环节",
+          "duration": "15分钟",
+          "activities": [
+            "典型例题讲解",
+            "分层练习",
+            "及时反馈"
+          ]
+        }
+      ],
+      "knowledgeMap": [
+        {
+          "topic": "核心概念",
+          "concepts": [
+            "数学建模",
+            "逻辑推理",
+            "空间想象",
+            "运算能力"
+          ]
+        },
+        {
+          "topic": "思维方法",
+          "concepts": [
+            "归纳总结",
+            "类比迁移",
+            "抽象概括",
+            "演绎推理"
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "id": "q18",
+          "type": "概念理解",
+          "content": "如何理解本节课的核心概念？"
+        },
+        {
+          "id": "q19",
+          "type": "发散思维",
+          "content": "这个问题还有其他解决方法吗？"
+        },
+        {
+          "id": "q20",
+          "type": "实践应用",
+          "content": "如何将所学知识应用到实际问题中？"
+        }
+      ],
+      "tasks": [
+        {
+          "content": "完成课后基础练习",
+          "status": "进行中"
+        },
+        {
+          "content": "尝试解决拓展题",
+          "status": "未开始"
+        },
+        {
+          "content": "整理知识要点",
+          "status": "未开始"
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": "q1",
+      "type": "引入问题",
+      "content": "为什么我们需要学习分数的加减法？"
+    },
+    {
+      "id": "q2",
+      "type": "探究问题",
+      "content": "同分母分数是如何进行加减运算的？"
+    },
+    {
+      "id": "q3",
+      "type": "思考问题",
+      "content": "为什么分母相同的分数可以直接进行加减运算？"
+    },
+    {
+      "id": "q4",
+      "type": "应用问题",
+      "content": "小明吃了3/8个蛋糕，小红吃了2/8个蛋糕，他们一共吃了多少？"
+    },
+    {
+      "id": "q5",
+      "type": "拓展问题",
+      "content": "如果分母不同，我们应该如何进行分数的加减运算？"
+    },
+    {
+      "id": "q6",
+      "type": "练习问题",
+      "content": "计算：5/12 + 3/12 = ?"
+    },
+    {
+      "id": "q7",
+      "type": "实践问题",
+      "content": "用分数表示班级中男生和女生的比例，并进行加法验证是否等于1。"
+    },
+    {
+      "id": "q8",
+      "type": "深入问题",
+      "content": "为什么1/2 + 1/3不能直接写成2/5？"
+    },
+    {
+      "id": "q9",
+      "type": "总结问题",
+      "content": "同分母分数加减法的关键步骤是什么？"
+    },
+    {
+      "id": "q10",
+      "type": "挑战问题",
+      "content": "如何用分数加减解决实际生活中的问题？"
+    },
+    {
+      "id": "q11",
+      "type": "反思问题",
+      "content": "学习分数加减法对我们有什么帮助？"
+    },
+    {
+      "id": "q12",
+      "type": "连接问题",
+      "content": "分数加减法与小数加减法有什么联系？"
+    },
+    {
+      "id": "q13",
+      "type": "创新问题",
+      "content": "能否创造一个生活中的例子来说明分数加减的应用？"
+    },
+    {
+      "id": "q14",
+      "type": "评价问题",
+      "content": "如何判断分数加减计算的结果是否正确？"
+    },
+    {
+      "id": "q15",
+      "type": "迁移问题",
+      "content": "学完分数加减，对学习分数乘除有什么启示？"
+    },
+    {
+      "id": "q16",
+      "type": "练习问题",
+      "content": "计算：5/12 + 3/12 = ?"
+    },
+    {
+      "id": "q17",
+      "type": "实践问题",
+      "content": "用分数表示班级中男生和女生的比例，并进行加法验证是否等于1。"
+    },
+    {
+      "id": "q18",
+      "type": "概念理解",
+      "content": "如何理解本节课的核心概念？"
+    },
+    {
+      "id": "q19",
+      "type": "发散思维",
+      "content": "这个问题还有其他解决方法吗？"
+    },
+    {
+      "id": "q20",
+      "type": "实践应用",
+      "content": "如何将所学知识应用到实际问题中？"
+    }
+  ],
+  "learningObjectives": [
+    {
+      "studentId": "1",
+      "subjects": [
+        {
+          "name": "语文",
+          "code": "CHINESE",
+          "masteryRate": 50,
+          "categories": [
+            {
+              "name": "写作技能",
+              "description": "写作相关的知识和技能",
+              "objectives": [
+                {
+                  "id": "1",
+                  "name": "确定写作主题",
+                  "status": "completed",
+                  "progress": 100
+                },
+                {
+                  "id": "2",
+                  "name": "构思与谋篇",
+                  "status": "not_started",
+                  "progress": 0
+                }
+              ]
+            },
+            {
+              "name": "阅读理解",
+              "description": "阅读理解能力培养",
+              "objectives": [
+                {
+                  "id": "3",
+                  "name": "理解中心思想",
+                  "status": "excellent",
+                  "progress": 100
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "数学",
+          "code": "MATH",
+          "masteryRate": 75,
+          "categories": [
+            {
+              "name": "数与代数",
+              "description": "数与代数相关知识",
+              "objectives": [
+                {
+                  "id": "4",
+                  "name": "分数四则运算",
+                  "status": "completed",
+                  "progress": 100
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "subjects": [
+    {
+      "code": "CHINESE",
+      "name": "语文",
+      "shortName": "语",
+      "color": "blue",
+      "icon": "BookOpen",
+      "order": 1
+    },
+    {
+      "code": "MATH",
+      "name": "数学",
+      "shortName": "数",
+      "color": "green",
+      "icon": "Calculator",
+      "order": 2
+    },
+    {
+      "code": "ENGLISH",
+      "name": "英语",
+      "shortName": "英",
+      "color": "purple",
+      "icon": "Languages",
+      "order": 3
+    },
+    {
+      "code": "SCIENCE",
+      "name": "科学",
+      "shortName": "科",
+      "color": "orange",
+      "icon": "Atom",
+      "order": 4
+    },
+    {
+      "code": "MORAL",
+      "name": "道德与法治",
+      "shortName": "道",
+      "color": "red",
+      "icon": "Scale",
+      "order": 5
+    },
+    {
+      "code": "PE",
+      "name": "体育与健康",
+      "shortName": "体",
+      "color": "cyan",
+      "icon": "Activity",
+      "order": 6
+    },
+    {
+      "code": "MUSIC",
+      "name": "音乐",
+      "shortName": "乐",
+      "color": "pink",
+      "icon": "Music",
+      "order": 7
+    },
+    {
+      "code": "ART",
+      "name": "美术",
+      "shortName": "美",
+      "color": "yellow",
+      "icon": "Palette",
+      "order": 8
+    },
+    {
+      "code": "LABOR",
+      "name": "劳动",
+      "shortName": "劳",
+      "color": "brown",
+      "icon": "Tool",
+      "order": 9
+    },
+    {
+      "code": "PRACTICE",
+      "name": "综合实践活动",
+      "shortName": "实",
+      "color": "indigo",
+      "icon": "Puzzle",
+      "order": 10
+    },
+    {
+      "code": "INFORMATION",
+      "name": "信息科技",
+      "shortName": "信",
+      "color": "slate",
+      "icon": "Laptop",
+      "order": 11
+    }
+  ],
+  "writingRecords": [
+    {
+      "id": "1",
+      "unitId": "1",
+      "studentId": "1",
+      "studentName": "张三",
+      "content": "今天，我和同学们一起参加了植树活动...",
+      "score": 95,
+      "feedback": "文章结构清晰，描写生动，能够很好地表达参与活动的感受。建议在细节描写上可以再加强。",
+      "submittedAt": "2024-03-15T10:30:00Z",
+      "gradedAt": "2024-03-16T14:20:00Z"
+    },
+    {
+      "id": "2",
+      "unitId": "1",
+      "studentId": "2",
+      "studentName": "李四",
+      "content": "春天来了，小草从土里钻出来...",
+      "submittedAt": "2024-03-15T11:45:00Z"
+    }
+  ],
+  "writingUnits": [
+    {
+      "id": "3-1-1",
+      "title": "习作：写日记",
+      "term": 1,
+      "grade": "三年级",
+      "coverImage": "https://picsum.photos/400/500?random=1",
+      "description": "学习写日记，记录生活中的点点滴滴",
+      "status": "not_started"
+    },
+    {
+      "id": "3-1-2",
+      "title": "习作：观察小动物",
+      "term": 1,
+      "grade": "三年级",
+      "coverImage": "https://picsum.photos/400/500?random=2",
+      "description": "仔细观察小动物的外形特点和活动情况",
+      "status": "not_started"
+    },
+    {
+      "id": "3-1-3",
+      "title": "习作：我的发现",
+      "term": 1,
+      "grade": "三年级",
+      "coverImage": "https://picsum.photos/400/500?random=3",
+      "description": "写一写你发现的新鲜有趣的事物",
+      "status": "not_started"
+    },
+    {
+      "id": "3-2-1",
+      "title": "习作：春天来了",
+      "term": 2,
+      "grade": "三年级",
+      "coverImage": "https://picsum.photos/400/500?random=4",
+      "description": "观察春天的变化，描写春天的景色",
+      "status": "in_progress"
+    },
+    {
+      "id": "3-2-2",
+      "title": "习作：这件事让我懂得",
+      "term": 2,
+      "grade": "三年级",
+      "coverImage": "/images/writing/lesson.jpg",
+      "description": "记录一件让你有所感悟的事情",
+      "status": "not_started"
+    },
+    {
+      "id": "3-2-3",
+      "title": "习作：我的好朋友",
+      "term": 2,
+      "grade": "三年级",
+      "coverImage": "/images/writing/friend.jpg",
+      "description": "介绍你的好朋友，说说你们之间的故事",
+      "status": "not_started"
+    },
+    {
+      "id": "4-1-1",
+      "title": "习作：我的一个心愿",
+      "term": 1,
+      "grade": "四年级",
+      "coverImage": "/images/writing/wish.jpg",
+      "description": "写一写你的心愿，以及为实现它所做的努力",
+      "status": "not_started"
+    },
+    {
+      "id": "4-1-2",
+      "title": "习作：秋天的景色",
+      "term": 1,
+      "grade": "四年级",
+      "coverImage": "/images/writing/autumn.jpg",
+      "description": "描写秋天的自然景色和人们的活动",
+      "status": "not_started"
+    },
+    {
+      "id": "4-1-3",
+      "title": "习作：我最喜欢的一个地方",
+      "term": 1,
+      "grade": "四年级",
+      "coverImage": "/images/writing/place.jpg",
+      "description": "介绍一个你最喜欢的地方，说说原因",
+      "status": "not_started"
+    },
+    {
+      "id": "4-2-1",
+      "title": "习作：我的一次尝试",
+      "term": 2,
+      "grade": "四年级",
+      "coverImage": "/images/writing/try.jpg",
+      "description": "记录一次新的尝试，分享你的收获",
+      "status": "not_started"
+    },
+    {
+      "id": "4-2-2",
+      "title": "习作：这样做对吗",
+      "term": 2,
+      "grade": "四年级",
+      "coverImage": "/images/writing/right.jpg",
+      "description": "记叙一件是非分明的事情，表达你的看法",
+      "status": "not_started"
+    },
+    {
+      "id": "4-2-3",
+      "title": "习作：我的理想",
+      "term": 2,
+      "grade": "四年级",
+      "coverImage": "/images/writing/dream.jpg",
+      "description": "写一写你的理想，说说你为之付出的努力",
+      "status": "not_started"
+    },
+    {
+      "id": "5-1-1",
+      "title": "习作：难忘的一天",
+      "term": 1,
+      "grade": "五年级",
+      "coverImage": "/images/writing/memory.jpg",
+      "description": "记叙一个难忘的日子，表达你的感受",
+      "status": "not_started"
+    },
+    {
+      "id": "5-1-2",
+      "title": "习作：我的收藏",
+      "term": 1,
+      "grade": "五年级",
+      "coverImage": "/images/writing/collection.jpg",
+      "description": "介绍你的收藏品，分享收藏的乐趣",
+      "status": "not_started"
+    },
+    {
+      "id": "5-1-3",
+      "title": "习作：我的成长故事",
+      "term": 1,
+      "grade": "五年级",
+      "coverImage": "/images/writing/growth.jpg",
+      "description": "回顾你的成长历程，分享成长的故事",
+      "status": "not_started"
+    },
+    {
+      "id": "5-2-1",
+      "title": "习作：我的家乡",
+      "term": 2,
+      "grade": "五年级",
+      "coverImage": "/images/writing/hometown.jpg",
+      "description": "介绍你的家乡，表达对家乡的感情",
+      "status": "not_started"
+    },
+    {
+      "id": "5-2-2",
+      "title": "习作：这就是我",
+      "term": 2,
+      "grade": "五年级",
+      "coverImage": "/images/writing/myself.jpg",
+      "description": "写一写你的特点和优缺点，展现真实的自己",
+      "status": "not_started"
+    },
+    {
+      "id": "5-2-3",
+      "title": "习作：未来的世界",
+      "term": 2,
+      "grade": "五年级",
+      "coverImage": "/images/writing/future.jpg",
+      "description": "想象未来世界的样子，表达你的憧憬",
+      "status": "not_started"
+    }
+  ],
+  "knowledgePoints": [
+    {
+      "id": "kp1",
+      "unitId": 1,
+      "title": "数的认识",
+      "description": "理解数的基本概念",
+      "type": "concept",
+      "level": 1,
+      "order": 1,
+      "status": "active"
+    },
+    {
+      "id": "kp2",
+      "unitId": 1,
+      "title": "数的读写",
+      "description": "掌握数的读写方法",
+      "type": "procedure",
+      "level": 2,
+      "parentId": "kp1",
+      "order": 1,
+      "status": "active"
+    }
+  ],
+  "knowledgeRelations": [
+    {
+      "id": "kr1",
+      "unitId": 1,
+      "sourceId": "kp1",
+      "targetId": "kp2",
+      "type": "leads_to",
+      "description": "从数的认识到数的读写"
     }
   ]
 }

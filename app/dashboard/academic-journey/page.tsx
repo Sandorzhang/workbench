@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth"
 import { redirect } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import Link from "next/link"
 
 export default async function AcademicJourneyPage() {
   // 获取当前用户会话
@@ -32,26 +33,32 @@ export default async function AcademicJourneyPage() {
       
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {academicData.map((student: any) => (
-          <Card key={student.id}>
-            <CardHeader>
-              <CardTitle className="flex items-center justify-between">
-                <span>{student.studentName}</span>
-                <Badge variant={student.currentStatus === "正常" ? "default" : "destructive"}>
-                  {student.currentStatus}
-                </Badge>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <div className="grid grid-cols-2 gap-2 text-sm">
-                <div className="text-muted-foreground">年级班级</div>
-                <div>{student.grade} {student.class}</div>
-                <div className="text-muted-foreground">学业表现</div>
-                <div>{student.academicPerformance}</div>
-                <div className="text-muted-foreground">最后更新</div>
-                <div>{student.lastUpdated}</div>
-              </div>
-            </CardContent>
-          </Card>
+          <Link 
+            href={`/dashboard/academic-journey/${student.id}`}
+            key={student.id}
+            className="block group"
+          >
+            <Card key={student.id}>
+              <CardHeader>
+                <CardTitle className="flex items-center justify-between">
+                  <span>{student.studentName}</span>
+                  <Badge variant={student.currentStatus === "正常" ? "default" : "destructive"}>
+                    {student.currentStatus}
+                  </Badge>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <div className="grid grid-cols-2 gap-2 text-sm">
+                  <div className="text-muted-foreground">年级班级</div>
+                  <div>{student.grade} {student.class}</div>
+                  <div className="text-muted-foreground">学业表现</div>
+                  <div>{student.academicPerformance}</div>
+                  <div className="text-muted-foreground">最后更新</div>
+                  <div>{student.lastUpdated}</div>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
         ))}
       </div>
     </div>
