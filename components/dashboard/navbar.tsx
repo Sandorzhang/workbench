@@ -1,6 +1,9 @@
 'use client'
 
-import { useRouter, usePathname } from 'next/navigation'
+import { usePathname, useRouter } from "next/navigation"
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { ArrowLeft } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,41 +24,45 @@ interface NavbarProps {
 }
 
 export function Navbar({ user }: NavbarProps) {
-  const router = useRouter()
   const pathname = usePathname()
+  const router = useRouter()
+  const isHomePage = pathname === '/dashboard'
 
   const handleLogout = () => {
     localStorage.removeItem('user')
     router.push('/login')
   }
 
-  const handleTitleClick = () => {
-    // 如果不是在工作台首页，则跳转到工作台
-    if (pathname !== '/dashboard') {
-      router.push('/dashboard')
-    }
-  }
-
   return (
-    <header className="h-16 bg-white shadow-sm flex items-center px-6 justify-between">
-      <h1 
-        className="text-xl font-semibold cursor-pointer hover:text-blue-600 transition-colors"
-        onClick={handleTitleClick}
-      >
-        数智大脑工作台
-      </h1>
-      <DropdownMenu>
-        <DropdownMenuTrigger>
-          <Avatar>
-            <AvatarImage src={user.avatar} />
-            <AvatarFallback>{user.name[0]}</AvatarFallback>
-          </Avatar>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem className="font-medium">{user.name}</DropdownMenuItem>
-          <DropdownMenuItem onClick={handleLogout}>退出登录</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </header>
+    <div className="border-b">
+      <div className="flex h-16 items-center justify-between px-6">
+        {isHomePage ? (
+          <div className="text-xl font-semibold">数智大脑工作台</div>
+        ) : (
+          <Button
+            variant="ghost"
+            className="flex items-center gap-2 text-xl font-semibold hover:bg-transparent px-0"
+            onClick={() => router.push('/dashboard')}
+          >
+            <ArrowLeft className="h-4 w-4" />
+            数智大脑工作台
+          </Button>
+        )}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+              <Avatar>
+                <AvatarImage src={user.avatar} />
+                <AvatarFallback>{user.name[0]}</AvatarFallback>
+              </Avatar>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem className="font-medium">{user.name}</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>退出登录</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </div>
   )
 } 

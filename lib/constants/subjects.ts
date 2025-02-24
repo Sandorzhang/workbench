@@ -15,7 +15,7 @@ export const SUBJECTS = {
 export type SubjectType = typeof SUBJECTS[keyof typeof SUBJECTS]
 
 // 获取所有学科代码
-export const getSubjectCodes = () => Object.keys(SUBJECTS) as keyof typeof SUBJECTS
+export const getSubjectCodes = () => Object.keys(SUBJECTS) as (keyof typeof SUBJECTS)[]
 
 // 获取所有学科名称
 export const getSubjectNames = () => Object.values(SUBJECTS)
