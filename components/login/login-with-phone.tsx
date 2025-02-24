@@ -15,6 +15,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
+import { cn } from "@/lib/utils"
 
 // 定义表单验证规则
 const formSchema = z.object({
@@ -143,7 +144,13 @@ export function LoginWithPhone() {
                     <Input
                       ref={codeInputRefs[index]}
                       maxLength={1}
-                      className="text-center h-14 text-3xl font-mono tracking-wider border-2 focus:border-primary p-0 leading-none"
+                      className={cn(
+                        "h-[68]",
+                        "text-center aspect-square text-4xl! font-mono",
+                        "border-2 focus:border-primary",
+                        "p-0 leading-none",
+                        "flex items-center justify-center"
+                      )}
                       onChange={(e) => handleCodeInput(index, e.target.value)}
                       inputMode="numeric"
                       pattern="[0-9]*"
