@@ -1,10 +1,11 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useToast } from "@/hooks/use-toast"
 import { useAuth } from "@/hooks/use-auth"
+import { Loader2 } from "lucide-react"
 import { 
   fetchRolePermissions, 
   updateRolePermissions, 
@@ -51,26 +52,55 @@ export default function AppManagementPage() {
   }, [user, toast])
 
   if (user?.role !== 'ADMIN') {
-    return <div>无权访问</div>
+    return (
+      <div className="flex h-[calc(100vh-4rem)] items-center justify-center">
+        <Card className="w-[400px]">
+          <CardHeader>
+            <CardTitle className="text-center text-red-500">访问受限</CardTitle>
+            <CardDescription className="text-center">
+              您没有权限访问此页面
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
+    )
   }
 
   if (isLoading) {
-    return <div>加载中...</div>
+    return (
+      <div className="flex h-[calc(100vh-4rem)] items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    )
   }
 
   return (
-    <div className="container mx-auto py-8">
+    <div className="container mx-auto py-8 space-y-8">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">应用权限管理</h1>
+          <p className="text-muted-foreground">
+            管理教师用户对各个应用的访问权限
+          </p>
+        </div>
+      </div>
+
       <Card>
-        <CardHeader>
-          <CardTitle>应用权限管理</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Tabs defaultValue="roles">
-            <TabsList>
-              <TabsTrigger value="roles">角色权限</TabsTrigger>
-              <TabsTrigger value="users">用户权限</TabsTrigger>
+        <CardContent className="p-6">
+          <Tabs defaultValue="roles" className="space-y-6">
+            <TabsList className="grid w-[400px] grid-cols-2">
+              <TabsTrigger value="roles">角色权限配置</TabsTrigger>
+              <TabsTrigger value="users">用户权限配置</TabsTrigger>
             </TabsList>
-            <TabsContent value="roles">
+            <TabsContent value="roles" className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-lg font-semibold">角色权限</h2>
+                  <p className="text-sm text-muted-foreground">
+                    配置不同角色可以访问的应用
+                  </p>
+                </div>
+              </div>
               <RolePermissionTable 
                 data={rolePermissions}
                 onUpdate={async (roleId, apps) => {
@@ -89,7 +119,15 @@ export default function AppManagementPage() {
                 }}
               />
             </TabsContent>
-            <TabsContent value="users">
+            <TabsContent value="users" className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-lg font-semibold">用户权限</h2>
+                  <p className="text-sm text-muted-foreground">
+                    为教师配置个性化的应用访问权限
+                  </p>
+                </div>
+              </div>
               <UserPermissionTable 
                 data={userPermissions}
                 onUpdate={async (userId, apps) => {

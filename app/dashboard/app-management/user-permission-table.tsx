@@ -1,21 +1,17 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import { Checkbox } from "@/components/ui/checkbox"
+import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Switch } from "@/components/ui/switch"
+import { Badge } from "@/components/ui/badge"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Input } from "@/components/ui/input"
+import { Search } from "lucide-react"
 import { fetchUserApplications } from '@/lib/api/auth'
 import type { Application } from '@/lib/api/auth'
-import { fetchRolePermissions, type RolePermission } from '@/lib/api/app-management'
+import { fetchRolePermissions, type RolePermission, type UserPermission } from '@/lib/api/app-management'
 import { useAuth } from '@/hooks/use-auth'
-import type { UserPermission } from '@/lib/api/app-management'
 
 interface UserPermissionTableProps {
   data: UserPermission[]
@@ -27,6 +23,7 @@ export function UserPermissionTable({ data, onUpdate }: UserPermissionTableProps
   const [applications, setApplications] = useState<Application[]>([])
   const [rolePermissions, setRolePermissions] = useState<RolePermission[]>([])
   const [selectedApps, setSelectedApps] = useState<Record<number, number[]>>({})
+  const [searchQuery, setSearchQuery] = useState('')
 
   // 加载所有应用列表和角色权限
   useEffect(() => {
@@ -92,53 +89,144 @@ export function UserPermissionTable({ data, onUpdate }: UserPermissionTableProps
     onUpdate(userId, validApps)
   }
 
+  // 过滤用户列表
+  const filteredUsers = data.filter(permission => {
+    if (!permission.user) return false
+    
+    const searchText = searchQuery.toLowerCase()
+    return (
+      permission.user.name.toLowerCase().includes(searchText) ||
+      permission.user.username.toLowerCase().includes(searchText)
+    )
+  })
+
   return (
-    <div className="space-y-4">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>用户名</TableHead>
-            <TableHead>姓名</TableHead>
-            <TableHead>角色</TableHead>
-            {applications.map(app => (
-              <TableHead key={app.id}>{app.name}</TableHead>
-            ))}
-            <TableHead>操作</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data.map(permission => {
-            if (!permission.user) return null // 跳过没有用户信息的记录
-            
-            const roleApps = getRolePermissions(permission.userId)
-            return (
-              <TableRow key={permission.userId}>
-                <TableCell>{permission.user.username}</TableCell>
-                <TableCell>{permission.user.name}</TableCell>
-                <TableCell>{permission.user.role === 'ADMIN' ? '管理员' : '教师'}</TableCell>
-                {applications.map(app => (
-                  <TableCell key={app.id}>
-                    <Checkbox
-                      checked={(selectedApps[permission.userId] || []).includes(app.id)}
-                      disabled={!roleApps.includes(app.id)}
-                      onCheckedChange={() => handleToggleApp(permission.userId, app.id)}
-                    />
-                  </TableCell>
-                ))}
-                <TableCell>
+    <div className="space-y-6">
+      {/* 搜索框 */}
+      <div className="flex items-center space-x-2">
+        <div className="relative flex-1 max-w-sm">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            placeholder="搜索用户..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-9"
+          />
+        </div>
+        <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+          <span>共 {data.length} 个用户</span>
+          {searchQuery && (
+            <>
+              <span>|</span>
+              <span>找到 {filteredUsers.length} 个匹配用户</span>
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* 用户列表 */}
+      {filteredUsers.length > 0 ? (
+        filteredUsers.map(permission => {
+          if (!permission.user) return null
+          
+          const roleApps = getRolePermissions(permission.userId)
+          return (
+            <Card key={permission.userId}>
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center space-x-4">
+                    <Avatar>
+                      <AvatarFallback>
+                        {permission.user.name.slice(0, 2)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <h3 className="text-lg font-semibold">
+                        {permission.user.name}
+                        <span className="ml-2 text-sm font-normal text-muted-foreground">
+                          ({permission.user.username})
+                        </span>
+                      </h3>
+                      <Badge variant="outline" className="mt-1">
+                        {permission.user.role === 'ADMIN' ? '管理员' : '教师'}
+                      </Badge>
+                    </div>
+                  </div>
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => handleSave(permission.userId)}
                   >
-                    保存
+                    保存更改
                   </Button>
-                </TableCell>
-              </TableRow>
-            )
-          })}
-        </TableBody>
-      </Table>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {applications.map(app => {
+                    const isEnabled = (selectedApps[permission.userId] || []).includes(app.id)
+                    const isAllowed = roleApps.includes(app.id)
+
+                    return (
+                      <div
+                        key={app.id}
+                        className={`p-4 rounded-lg border ${
+                          isAllowed ? 'hover:border-primary cursor-pointer' : 'opacity-50'
+                        }`}
+                        onClick={() => {
+                          if (isAllowed) {
+                            handleToggleApp(permission.userId, app.id)
+                          }
+                        }}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-3">
+                            <div className="flex flex-col">
+                              <span className="font-medium">{app.name}</span>
+                              <span className="text-xs text-muted-foreground">
+                                {app.code}
+                              </span>
+                            </div>
+                          </div>
+                          <Switch
+                            checked={isEnabled}
+                            disabled={!isAllowed}
+                            onCheckedChange={() => handleToggleApp(permission.userId, app.id)}
+                          />
+                        </div>
+                        <p className="mt-2 text-sm text-muted-foreground">
+                          {app.description}
+                        </p>
+                        {!isAllowed && (
+                          <Badge variant="secondary" className="mt-2">
+                            角色未授权
+                          </Badge>
+                        )}
+                      </div>
+                    )
+                  })}
+                </div>
+              </CardContent>
+            </Card>
+          )
+        })
+      ) : (
+        <Card>
+          <CardContent className="py-16">
+            <div className="text-center text-muted-foreground">
+              {searchQuery ? (
+                <>
+                  <p className="text-lg">未找到匹配的用户</p>
+                  <p className="text-sm mt-1">
+                    尝试使用其他关键词搜索
+                  </p>
+                </>
+              ) : (
+                <p className="text-lg">暂无用户数据</p>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   )
 } 

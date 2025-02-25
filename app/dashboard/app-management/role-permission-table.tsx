@@ -1,18 +1,12 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import { Checkbox } from "@/components/ui/checkbox"
+import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Switch } from "@/components/ui/switch"
 import { fetchUserApplications } from '@/lib/api/auth'
 import type { Application } from '@/lib/api/auth'
+import { Badge } from "@/components/ui/badge"
 
 interface RolePermissionTableProps {
   data: {
@@ -27,6 +21,7 @@ interface RolePermissionTableProps {
 export function RolePermissionTable({ data, onUpdate }: RolePermissionTableProps) {
   const [applications, setApplications] = useState<Application[]>([])
   const [selectedApps, setSelectedApps] = useState<Record<string, number[]>>({})
+  const [editingRole, setEditingRole] = useState<string | null>(null)
 
   // 加载所有应用列表
   useEffect(() => {
@@ -65,45 +60,92 @@ export function RolePermissionTable({ data, onUpdate }: RolePermissionTableProps
 
   const handleSave = (roleId: string) => {
     onUpdate(roleId, selectedApps[roleId] || [])
+    setEditingRole(null)
   }
 
   return (
-    <div className="space-y-4">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>角色</TableHead>
-            {applications.map(app => (
-              <TableHead key={app.id}>{app.name}</TableHead>
-            ))}
-            <TableHead>操作</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data.map(role => (
-            <TableRow key={role.roleId}>
-              <TableCell>{role.roleName}</TableCell>
-              {applications.map(app => (
-                <TableCell key={app.id}>
-                  <Checkbox
-                    checked={(selectedApps[role.roleId] || []).includes(app.id)}
-                    onCheckedChange={() => handleToggleApp(role.roleId, app.id)}
-                  />
-                </TableCell>
-              ))}
-              <TableCell>
+    <div className="space-y-6">
+      {data.map(role => (
+        <Card key={role.roleId} className="relative">
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h3 className="text-lg font-semibold">{role.roleName}</h3>
+                <p className="text-sm text-muted-foreground">
+                  已启用 {(selectedApps[role.roleId] || []).length} 个应用
+                </p>
+              </div>
+              {editingRole === role.roleId ? (
+                <div className="space-x-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setEditingRole(null)}
+                  >
+                    取消
+                  </Button>
+                  <Button
+                    size="sm"
+                    onClick={() => handleSave(role.roleId)}
+                  >
+                    保存
+                  </Button>
+                </div>
+              ) : (
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => handleSave(role.roleId)}
+                  onClick={() => setEditingRole(role.roleId)}
                 >
-                  保存
+                  编辑权限
                 </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+              )}
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {applications.map(app => (
+                <div
+                  key={app.id}
+                  className={`p-4 rounded-lg border ${
+                    editingRole === role.roleId
+                      ? 'hover:border-primary cursor-pointer'
+                      : ''
+                  }`}
+                  onClick={() => {
+                    if (editingRole === role.roleId) {
+                      handleToggleApp(role.roleId, app.id)
+                    }
+                  }}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <div className="flex flex-col">
+                        <span className="font-medium">{app.name}</span>
+                        <span className="text-xs text-muted-foreground">
+                          {app.code}
+                        </span>
+                      </div>
+                    </div>
+                    {editingRole === role.roleId ? (
+                      <Switch
+                        checked={(selectedApps[role.roleId] || []).includes(app.id)}
+                        onCheckedChange={() => handleToggleApp(role.roleId, app.id)}
+                      />
+                    ) : (
+                      <Badge variant={(selectedApps[role.roleId] || []).includes(app.id) ? "default" : "secondary"}>
+                        {(selectedApps[role.roleId] || []).includes(app.id) ? "已启用" : "未启用"}
+                      </Badge>
+                    )}
+                  </div>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    {app.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      ))}
     </div>
   )
 } 
