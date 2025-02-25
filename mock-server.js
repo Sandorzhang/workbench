@@ -18,18 +18,46 @@
  */
 
 const jsonServer = require('json-server');
+const path = require('path');
+const fs = require('fs');
 const server = jsonServer.create();
-const router = jsonServer.router('db.json');
 const middlewares = jsonServer.defaults();
 
-// 统一使用 /api 前缀
-server.use(jsonServer.rewriter({
-  '/api/*': '/$1', // 将所有 /api 开头的请求重写到对应的资源
-}));
+// 合并所有 JSON 文件数据
+const getData = () => {
+  const dataDir = path.join(__dirname, 'mocks/data');
+  let db = {};
 
+  // 递归读取所有 JSON 文件
+  const readDir = (dir) => {
+    const files = fs.readdirSync(dir);
+    files.forEach(file => {
+      const filePath = path.join(dir, file);
+      const stat = fs.statSync(filePath);
+      
+      if (stat.isDirectory()) {
+        readDir(filePath);
+      } else if (file.endsWith('.json')) {
+        const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+        db = { ...db, ...data };
+      }
+    });
+  };
+
+  readDir(dataDir);
+  return db;
+};
+
+// 创建路由
+const router = jsonServer.router(getData());
+
+// 使用中间件
 server.use(middlewares);
-server.use('/api', router); // 添加 /api 前缀
+server.use(require('./mocks/middleware'));
+server.use('/api', router);
 
-server.listen(3001, () => {
-  console.log('JSON Server is running on port 3001');
+// 启动服务器
+const port = 3100;
+server.listen(port, () => {
+  console.log(`JSON Server is running on port ${port}`);
 }); 

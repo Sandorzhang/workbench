@@ -1,0 +1,73 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "name": "期中写作评估",
+      "description": "三年级期中写作水平评估",
+      "frameworkId": 1,
+      "status": "published",
+      "requirements": {
+        "wordCount": {
+          "min": 800,
+          "max": 1200
+        },
+        "timeLimit": 60,
+        "topics": [
+          "我的理想",
+          "难忘的一天",
+          "一次有趣的活动"
+        ]
+      },
+      "schedule": {
+        "startTime": "2024-04-01T09:00:00Z",
+        "endTime": "2024-04-01T10:00:00Z"
+      },
+      "results": [
+        {
+          "studentId": 1,
+          "scores": {
+            "structure": 2,
+            "expression": 3,
+            "content": 2
+          },
+          "feedback": "结构较好，表达生动，可以在内容深度上再加强"
+        }
+      ],
+      "createdAt": "2024-03-21T00:00:00Z",
+      "updatedAt": "2024-03-21T00:00:00Z"
+    },
+    {
+      "id": 2,
+      "name": "数学期中能力评估",
+      "description": "三年级数学解题能力评估",
+      "frameworkId": 2,
+      "status": "published",
+      "requirements": {
+        "timeLimit": 90,
+        "questionCount": 20,
+        "questionTypes": [
+          "选择题",
+          "填空题",
+          "解答题"
+        ]
+      },
+      "schedule": {
+        "startTime": "2024-04-10T09:00:00Z",
+        "endTime": "2024-04-10T10:30:00Z"
+      },
+      "results": [
+        {
+          "studentId": 1,
+          "scores": {
+            "calculation": 3,
+            "problemSolving": 2,
+            "innovation": 2
+          },
+          "feedback": "计算能力强，可以在解题思路方面继续提高"
+        }
+      ],
+      "createdAt": "2024-03-21T00:00:00Z",
+      "updatedAt": "2024-03-21T00:00:00Z"
+    }
+  ]
+} 

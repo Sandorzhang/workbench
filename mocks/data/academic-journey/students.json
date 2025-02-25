@@ -1,0 +1,62 @@
+{
+  "students": [
+    {
+      "id": 1,
+      "name": "张三",
+      "grade": "三年级",
+      "class": "1班",
+      "studentId": "20240301001",
+      "status": "active",
+      "profile": {
+        "gender": "男",
+        "birthday": "2015-09-01",
+        "interests": ["写作", "阅读"],
+        "specialNeeds": null
+      },
+      "academicRecord": {
+        "averageScore": 88,
+        "ranking": 15,
+        "strengths": ["语文", "数学"],
+        "improvements": ["英语"]
+      },
+      "assessments": [
+        {
+          "taskId": 1,
+          "score": 85,
+          "completedAt": "2024-04-01T10:00:00Z"
+        }
+      ],
+      "createdAt": "2024-03-21T00:00:00Z",
+      "updatedAt": "2024-03-21T00:00:00Z"
+    },
+    {
+      "id": 2,
+      "name": "李四",
+      "grade": "三年级",
+      "class": "2班",
+      "studentId": "20240301002",
+      "status": "active",
+      "profile": {
+        "gender": "女",
+        "birthday": "2015-10-15",
+        "interests": ["数学", "音乐"],
+        "specialNeeds": null
+      },
+      "academicRecord": {
+        "averageScore": 92,
+        "ranking": 5,
+        "strengths": ["数学", "英语"],
+        "improvements": ["语文"]
+      },
+      "assessments": [
+        {
+          "taskId": 2,
+          "score": 95,
+          "completedAt": "2024-04-10T10:30:00Z"
+        }
+      ],
+      "createdAt": "2024-03-21T00:00:00Z",
+      "updatedAt": "2024-03-21T00:00:00Z"
+    }
+  ]
+} 

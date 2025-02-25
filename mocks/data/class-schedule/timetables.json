@@ -1,0 +1,62 @@
+{
+  "timetables": [
+    {
+      "id": 1,
+      "classId": "3-1",
+      "semester": "2024-spring",
+      "schedule": {
+        "monday": [
+          {
+            "period": 1,
+            "subject": "语文",
+            "teacherId": 2,
+            "room": "3-101",
+            "time": {
+              "start": "08:00",
+              "end": "08:45"
+            }
+          },
+          {
+            "period": 2,
+            "subject": "数学",
+            "teacherId": 3,
+            "room": "3-101",
+            "time": {
+              "start": "08:55",
+              "end": "09:40"
+            }
+          }
+        ]
+      },
+      "effective": {
+        "from": "2024-02-26",
+        "to": "2024-07-12"
+      },
+      "status": "active",
+      "createdAt": "2024-02-20T00:00:00Z",
+      "updatedAt": "2024-02-20T00:00:00Z"
+    }
+  ],
+  "adjustments": [
+    {
+      "id": 1,
+      "timetableId": 1,
+      "date": "2024-03-04",
+      "type": "swap",
+      "changes": {
+        "from": {
+          "period": 1,
+          "subject": "语文"
+        },
+        "to": {
+          "period": 2,
+          "subject": "数学"
+        }
+      },
+      "reason": "教师调课需要",
+      "status": "approved",
+      "createdAt": "2024-03-01T00:00:00Z",
+      "updatedAt": "2024-03-01T00:00:00Z"
+    }
+  ]
+} 

@@ -1,0 +1,40 @@
+{
+  "moments": [
+    {
+      "id": 1,
+      "teacherId": 1,
+      "classId": "3-1",
+      "type": "activity",
+      "title": "小组写作讨论",
+      "description": "学生们正在进行写作素材的交流和讨论",
+      "content": {
+        "text": "今天的写作课上，同学们分组讨论写作素材的收集方法，气氛非常活跃。",
+        "tags": ["写作课", "小组活动", "课堂互动"],
+        "location": "教室3-101"
+      },
+      "media": [
+        {
+          "id": 1,
+          "type": "image",
+          "url": "/media/classroom/20240301-1.jpg",
+          "caption": "小组讨论现场"
+        }
+      ],
+      "interactions": {
+        "likes": 12,
+        "comments": [
+          {
+            "id": 1,
+            "userId": 2,
+            "content": "孩子们很投入讨论",
+            "createdAt": "2024-03-01T09:15:00Z"
+          }
+        ]
+      },
+      "visibility": "public",
+      "status": "published",
+      "createdAt": "2024-03-01T08:45:00Z",
+      "updatedAt": "2024-03-01T09:15:00Z"
+    }
+  ]
+} 

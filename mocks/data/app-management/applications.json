@@ -1,0 +1,34 @@
+{
+  "applications": [
+    {
+      "id": 1,
+      "name": "应用权限管理",
+      "code": "app-management",
+      "description": "管理系统应用和权限",
+      "status": "active",
+      "adminOnly": true,
+      "createdAt": "2024-03-01T00:00:00Z",
+      "updatedAt": "2024-03-01T00:00:00Z"
+    },
+    {
+      "id": 2,
+      "name": "单元教学",
+      "code": "unit-teaching",
+      "description": "管理教学单元和课程",
+      "status": "active",
+      "adminOnly": false,
+      "createdAt": "2024-03-01T00:00:00Z",
+      "updatedAt": "2024-03-01T00:00:00Z"
+    },
+    {
+      "id": 3,
+      "name": "学术旅程",
+      "code": "academic-journey",
+      "description": "跟踪学生的学术发展",
+      "status": "active",
+      "adminOnly": false,
+      "createdAt": "2024-03-01T00:00:00Z",
+      "updatedAt": "2024-03-01T00:00:00Z"
+    }
+  ]
+} 

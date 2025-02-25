@@ -1,0 +1,55 @@
+{
+  "progress": [
+    {
+      "id": 1,
+      "studentId": 1,
+      "semester": "2024-spring",
+      "subjects": [
+        {
+          "name": "语文",
+          "scores": [
+            {
+              "type": "monthly",
+              "date": "2024-03-01",
+              "score": 88,
+              "rank": 15,
+              "total": 100
+            },
+            {
+              "type": "midterm",
+              "date": "2024-04-15",
+              "score": 92,
+              "rank": 10,
+              "total": 100
+            }
+          ],
+          "average": 90,
+          "trend": "up"
+        },
+        {
+          "name": "数学",
+          "scores": [
+            {
+              "type": "monthly",
+              "date": "2024-03-01",
+              "score": 85,
+              "rank": 20,
+              "total": 100
+            },
+            {
+              "type": "midterm",
+              "date": "2024-04-15",
+              "score": 88,
+              "rank": 18,
+              "total": 100
+            }
+          ],
+          "average": 86.5,
+          "trend": "up"
+        }
+      ],
+      "createdAt": "2024-03-01T00:00:00Z",
+      "updatedAt": "2024-04-15T00:00:00Z"
+    }
+  ]
+} 

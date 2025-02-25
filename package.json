@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "mock": "json-server mock/db.json -p 3100"
+    "mock": "node mock-server.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^4.1.0",
@@ -40,10 +40,11 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "autoprefixer": "^10.4.19",
     "eslint": "^9",
     "eslint-config-next": "15.1.0",
     "json-server": "^0.17.4",
-    "postcss": "^8",
+    "postcss": "^8.4.38",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }

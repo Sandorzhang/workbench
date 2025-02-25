@@ -1,0 +1,63 @@
+{
+  "lessons": [
+    {
+      "id": 1,
+      "unitId": 1,
+      "title": "记叙文写作导论",
+      "description": "介绍记叙文的基本要素和写作技巧",
+      "status": "completed",
+      "schedule": {
+        "date": "2024-03-01",
+        "startTime": "08:00",
+        "endTime": "08:45"
+      },
+      "content": {
+        "objectives": [
+          "理解记叙文的基本结构",
+          "掌握写作素材的收集方法"
+        ],
+        "keyPoints": [
+          "时间顺序的安排",
+          "人物描写的方法",
+          "环境描写的技巧"
+        ],
+        "activities": [
+          {
+            "name": "范文赏析",
+            "duration": 15,
+            "description": "分析优秀记叙文的写作特点"
+          },
+          {
+            "name": "小组讨论",
+            "duration": 10,
+            "description": "交流写作素材的收集经验"
+          }
+        ]
+      },
+      "homework": {
+        "description": "完成一篇记叙文初稿",
+        "requirements": {
+          "wordCount": {
+            "min": 600,
+            "max": 800
+          },
+          "deadline": "2024-03-03T16:00:00Z"
+        }
+      },
+      "resources": [
+        {
+          "id": 1,
+          "type": "document",
+          "name": "课件",
+          "url": "/resources/lesson1-slides.pptx"
+        }
+      ],
+      "feedback": {
+        "teacherNotes": "学生参与度高，理解良好",
+        "improvements": "可以增加更多实践环节"
+      },
+      "createdAt": "2024-03-01T00:00:00Z",
+      "updatedAt": "2024-03-01T09:00:00Z"
+    }
+  ]
+} 

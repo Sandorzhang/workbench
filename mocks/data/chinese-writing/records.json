@@ -1,0 +1,39 @@
+{
+  "records": [
+    {
+      "id": 1,
+      "studentId": 1,
+      "unitId": 1,
+      "title": "我的一天",
+      "content": "今天是个愉快的一天...",
+      "type": "记叙文",
+      "wordCount": 800,
+      "score": 85,
+      "feedback": {
+        "strengths": ["结构完整", "描写生动"],
+        "improvements": ["可以增加细节描写"],
+        "comments": "整体表现不错，继续加油！"
+      },
+      "status": "completed",
+      "createdAt": "2024-03-01T00:00:00Z",
+      "updatedAt": "2024-03-01T00:00:00Z"
+    }
+  ],
+  "units": [
+    {
+      "id": 1,
+      "name": "记叙文写作",
+      "description": "通过日常生活记录培养写作能力",
+      "requirements": {
+        "wordCount": {
+          "min": 600,
+          "max": 1000
+        },
+        "topics": ["我的一天", "难忘的事", "有趣的人"]
+      },
+      "status": "active",
+      "createdAt": "2024-03-01T00:00:00Z",
+      "updatedAt": "2024-03-01T00:00:00Z"
+    }
+  ]
+} 

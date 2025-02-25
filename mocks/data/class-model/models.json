@@ -1,0 +1,72 @@
+{
+  "models": [
+    {
+      "id": 1,
+      "name": "三年级语文教学模型",
+      "subject": "语文",
+      "grade": "三年级",
+      "description": "基于写作能力培养的教学模型",
+      "structure": {
+        "phases": [
+          {
+            "id": 1,
+            "name": "基础写作训练",
+            "duration": "4周",
+            "objectives": [
+              "掌握记叙文写作要点",
+              "培养观察能力"
+            ],
+            "activities": [
+              {
+                "type": "practice",
+                "name": "日记写作",
+                "frequency": "每周2次"
+              }
+            ]
+          }
+        ],
+        "assessments": [
+          {
+            "type": "formative",
+            "frequency": "每周",
+            "methods": ["课堂观察", "作业点评"]
+          }
+        ]
+      },
+      "resources": [
+        {
+          "id": 1,
+          "type": "document",
+          "name": "写作教学指导",
+          "url": "/resources/writing-guide.pdf"
+        }
+      ],
+      "status": "active",
+      "createdAt": "2024-03-01T00:00:00Z",
+      "updatedAt": "2024-03-01T00:00:00Z"
+    }
+  ],
+  "implementations": [
+    {
+      "id": 1,
+      "modelId": 1,
+      "classId": "3-1",
+      "teacherId": 2,
+      "semester": "2024-spring",
+      "progress": {
+        "currentPhase": 1,
+        "completion": 25,
+        "milestones": [
+          {
+            "date": "2024-03-01",
+            "event": "开始实施基础写作训练",
+            "status": "completed"
+          }
+        ]
+      },
+      "status": "in_progress",
+      "createdAt": "2024-03-01T00:00:00Z",
+      "updatedAt": "2024-03-01T00:00:00Z"
+    }
+  ]
+} 

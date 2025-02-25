@@ -1,0 +1,50 @@
+{
+  "journeys": [
+    {
+      "id": 1,
+      "studentId": 1,
+      "milestones": [
+        {
+          "id": 1,
+          "type": "assessment",
+          "title": "期中写作评估",
+          "description": "完成三年级期中写作评估",
+          "date": "2024-04-01T10:00:00Z",
+          "status": "completed",
+          "result": {
+            "score": 85,
+            "rank": 15,
+            "feedback": "写作能力良好，结构清晰"
+          }
+        },
+        {
+          "id": 2,
+          "type": "achievement",
+          "title": "作文获奖",
+          "description": "校级作文比赛三等奖",
+          "date": "2024-03-15T00:00:00Z",
+          "status": "completed",
+          "attachments": [
+            {
+              "id": 1,
+              "type": "certificate",
+              "url": "/certificates/writing-contest-2024.pdf"
+            }
+          ]
+        }
+      ],
+      "goals": [
+        {
+          "id": 1,
+          "title": "提高写作水平",
+          "description": "在下学期写作评估中达到90分以上",
+          "deadline": "2024-07-01T00:00:00Z",
+          "status": "in_progress",
+          "progress": 60
+        }
+      ],
+      "createdAt": "2024-03-01T00:00:00Z",
+      "updatedAt": "2024-03-21T00:00:00Z"
+    }
+  ]
+} 

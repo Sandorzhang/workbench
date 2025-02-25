@@ -30,5 +30,30 @@
     }
   ],
   "tasks": [],
-  "students": []
+  "students": [],
+  "applications": [
+    {
+      "id": 1,
+      "name": "应用权限管理",
+      "code": "app-management",
+      "description": "管理系统应用和权限",
+      "status": "active",
+      "createdAt": "2024-03-01T00:00:00Z",
+      "updatedAt": "2024-03-01T00:00:00Z"
+    }
+  ],
+  "role-permissions": [
+    {
+      "id": 1,
+      "roleId": "admin",
+      "roleName": "管理员",
+      "applications": [1, 2, 3]
+    },
+    {
+      "id": 2,
+      "roleId": "teacher",
+      "roleName": "教师",
+      "applications": [2, 3]
+    }
+  ]
 } 

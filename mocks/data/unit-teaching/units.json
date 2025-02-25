@@ -1,0 +1,45 @@
+{
+  "units": [
+    {
+      "id": 1,
+      "name": "写作技巧提升",
+      "subject": "语文",
+      "grade": "三年级",
+      "semester": "2024-spring",
+      "status": "in_progress",
+      "objectives": [
+        "掌握记叙文写作要点",
+        "提高语言表达能力",
+        "培养观察和描写能力"
+      ],
+      "schedule": {
+        "startDate": "2024-03-01",
+        "endDate": "2024-04-30",
+        "totalHours": 24,
+        "weeklyHours": 3
+      },
+      "lessons": [
+        {
+          "id": 1,
+          "title": "记叙文写作导论",
+          "duration": 45,
+          "content": {
+            "topics": ["记叙文的基本要素", "写作素材的积累"],
+            "activities": ["范文赏析", "写作练习"],
+            "homework": "完成一篇记叙文初稿"
+          }
+        }
+      ],
+      "resources": [
+        {
+          "id": 1,
+          "type": "document",
+          "name": "记叙文写作指导",
+          "url": "/resources/writing-guide.pdf"
+        }
+      ],
+      "createdAt": "2024-03-01T00:00:00Z",
+      "updatedAt": "2024-03-01T00:00:00Z"
+    }
+  ]
+} 

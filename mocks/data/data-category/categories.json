@@ -1,0 +1,51 @@
+{
+  "categories": [
+    {
+      "id": 1,
+      "name": "学生成长档案",
+      "code": "student-portfolio",
+      "description": "学生的综合素质评价数据",
+      "type": "academic",
+      "fields": [
+        {
+          "id": 1,
+          "name": "学习能力",
+          "code": "learning-ability",
+          "type": "rating",
+          "options": [
+            { "value": 1, "label": "需要提高" },
+            { "value": 2, "label": "达到预期" },
+            { "value": 3, "label": "超出预期" }
+          ],
+          "required": true
+        },
+        {
+          "id": 2,
+          "name": "兴趣爱好",
+          "code": "interests",
+          "type": "tags",
+          "options": ["阅读", "写作", "音乐", "美术", "体育"],
+          "multiple": true
+        }
+      ],
+      "status": "active",
+      "createdAt": "2024-03-01T00:00:00Z",
+      "updatedAt": "2024-03-01T00:00:00Z"
+    }
+  ],
+  "records": [
+    {
+      "id": 1,
+      "categoryId": 1,
+      "studentId": 1,
+      "data": {
+        "learning-ability": 2,
+        "interests": ["阅读", "写作"]
+      },
+      "semester": "2024-spring",
+      "createdBy": 2,
+      "createdAt": "2024-03-01T00:00:00Z",
+      "updatedAt": "2024-03-01T00:00:00Z"
+    }
+  ]
+} 

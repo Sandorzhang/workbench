@@ -1,0 +1,27 @@
+{
+  "students": [
+    {
+      "id": 1,
+      "name": "张三",
+      "studentId": "S20240301",
+      "grade": "三年级",
+      "class": "1班",
+      "status": "active",
+      "profile": {
+        "gender": "男",
+        "birthday": "2015-09-01",
+        "guardian": {
+          "name": "张父",
+          "phone": "13900139000",
+          "relation": "父亲"
+        }
+      },
+      "enrollment": {
+        "date": "2024-02-26",
+        "type": "正常入学"
+      },
+      "createdAt": "2024-03-01T00:00:00Z",
+      "updatedAt": "2024-03-01T00:00:00Z"
+    }
+  ]
+} 

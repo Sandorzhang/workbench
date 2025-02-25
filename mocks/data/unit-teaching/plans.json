@@ -1,0 +1,52 @@
+{
+  "plans": [
+    {
+      "id": 1,
+      "title": "三年级语文写作教学计划",
+      "subject": "语文",
+      "grade": "三年级",
+      "semester": "2024-spring",
+      "teacherId": 2,
+      "overview": {
+        "objectives": [
+          "提升写作能力",
+          "培养观察能力",
+          "丰富写作素材"
+        ],
+        "duration": "16周",
+        "weeklyHours": 6
+      },
+      "schedule": [
+        {
+          "week": 1,
+          "theme": "记叙文写作基础",
+          "lessons": [
+            {
+              "day": "monday",
+              "content": "写作素材的收集方法",
+              "activities": ["课堂讲解", "实践练习"],
+              "resources": [1]
+            }
+          ]
+        }
+      ],
+      "assessments": [
+        {
+          "type": "formative",
+          "method": "课堂观察",
+          "frequency": "每课时",
+          "weight": 30
+        },
+        {
+          "type": "summative",
+          "method": "期末考试",
+          "schedule": "第16周",
+          "weight": 70
+        }
+      ],
+      "status": "active",
+      "createdAt": "2024-03-01T00:00:00Z",
+      "updatedAt": "2024-03-01T00:00:00Z"
+    }
+  ]
+} 

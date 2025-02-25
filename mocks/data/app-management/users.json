@@ -1,0 +1,34 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "name": "系统管理员",
+      "role": "ADMIN",
+      "tenantId": 1,
+      "status": "active",
+      "createdAt": "2024-03-01T00:00:00Z",
+      "updatedAt": "2024-03-01T00:00:00Z"
+    },
+    {
+      "id": 2,
+      "username": "teacher1",
+      "name": "李老师",
+      "role": "TEACHER",
+      "tenantId": 1,
+      "status": "active",
+      "createdAt": "2024-03-01T00:00:00Z",
+      "updatedAt": "2024-03-01T00:00:00Z"
+    },
+    {
+      "id": 3,
+      "username": "teacher2",
+      "name": "王老师",
+      "role": "TEACHER",
+      "tenantId": 1,
+      "status": "active",
+      "createdAt": "2024-03-01T00:00:00Z",
+      "updatedAt": "2024-03-01T00:00:00Z"
+    }
+  ]
+} 
