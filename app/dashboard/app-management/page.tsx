@@ -95,8 +95,20 @@ export default function AppManagementPage() {
                 onUpdate={async (userId, apps) => {
                   try {
                     await updateUserPermissions(userId, apps)
-                    toast({ title: "成功", description: "用户权限更新成功" })
+                    
+                    // 重新加载权限数据
+                    if (user?.tenantId) {
+                      const updatedPermissions = await fetchUserPermissions(user.tenantId)
+                      setUserPermissions(updatedPermissions)
+                    }
+
+                    toast({ 
+                      title: "成功", 
+                      description: "用户权限更新成功",
+                      variant: "default"
+                    })
                   } catch (error) {
+                    console.error('更新用户权限失败:', error)
                     toast({
                       variant: "destructive",
                       title: "错误",

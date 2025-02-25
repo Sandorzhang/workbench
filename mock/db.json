@@ -47,24 +47,21 @@
           "code": "app-management",
           "name": "应用权限管理",
           "description": "管理教师用户的应用权限",
-          "icon": "Settings",
-          "adminOnly": true
+          "icon": "Settings"
         },
         {
           "id": 2,
           "code": "unit-teaching",
           "name": "单元教学管理",
           "description": "管理教学单元、课时和教案",
-          "icon": "BookOpen",
-          "adminOnly": false
+          "icon": "BookOpen"
         },
         {
           "id": 3,
           "code": "student-management",
           "name": "学生管理",
           "description": "管理学校的学生信息",
-          "icon": "Users",
-          "adminOnly": true
+          "icon": "Users"
         },
         {
           "id": 4,
@@ -99,8 +96,7 @@
           "code": "data-category",
           "name": "数据类目",
           "description": "管理教学相关的数据类目",
-          "icon": "Database",
-          "adminOnly": true
+          "icon": "Database"
         },
         {
           "id": 9,
@@ -155,7 +151,8 @@
         4,
         5,
         6,
-        7
+        7,
+        3
       ]
     }
   ],
@@ -1797,7 +1794,8 @@
         5,
         6,
         7,
-        8
+        8,
+        3
       ]
     }
   ]
