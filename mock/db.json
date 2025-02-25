@@ -1895,16 +1895,6 @@
       "deadline": "2024-04-01",
       "completionRate": 75,
       "frameworkId": 1
-    },
-    {
-      "id": 2,
-      "title": "数学应用题解题能力测评",
-      "grade": "五年级",
-      "class": "2班",
-      "type": "解题能力",
-      "status": "已完成",
-      "deadline": "2024-03-15",
-      "completionRate": 100
     }
   ],
   "dataCategories": [
@@ -1949,31 +1939,6 @@
               "name": "把握文章主旨",
               "description": "能准确理解文章的中心思想",
               "score": 20
-            },
-            {
-              "id": 2,
-              "name": "理解重要细节",
-              "description": "能理解文章的关键信息和细节",
-              "score": 20
-            }
-          ]
-        },
-        {
-          "id": 2,
-          "name": "分析能力",
-          "weight": 30,
-          "indicators": [
-            {
-              "id": 3,
-              "name": "分析文章结构",
-              "description": "能分析文章的组织结构和写作手法",
-              "score": 15
-            },
-            {
-              "id": 4,
-              "name": "归纳内容要点",
-              "description": "能归纳文章的主要内容和要点",
-              "score": 15
             }
           ]
         }
@@ -1981,33 +1946,6 @@
       "status": "published",
       "createdAt": "2024-03-01",
       "updatedAt": "2024-03-20"
-    },
-    {
-      "name": "测试",
-      "description": "1231",
-      "dimensions": [
-        {
-          "id": 1,
-          "name": "123",
-          "weight": 0,
-          "indicators": [
-            {
-              "id": 1,
-              "name": "123",
-              "description": "123123",
-              "score": 0
-            },
-            {
-              "id": 2,
-              "name": "123123",
-              "description": "123123",
-              "score": 0
-            }
-          ]
-        }
-      ],
-      "status": "draft",
-      "id": 2
     }
   ]
 }
