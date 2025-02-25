@@ -16,6 +16,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { cn } from "@/lib/types/utils"
+import { authApi } from '@/lib/api/auth'
+import { eventBus } from "@/lib/events"
 
 // 定义表单验证规则
 const formSchema = z.object({
@@ -47,15 +49,14 @@ export function LoginWithPhone() {
     }
 
     setCountdown(60)
-    // 调用发送验证码API
     try {
-      await fetch('/api/auth/send-code', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone }),
-      })
+      const data = await authApi.sendCode({ phone })
+      console.log('验证码发送成功:', data)
     } catch (error) {
-      console.error(error)
+      console.error('发送验证码错误:', error)
+      form.setError("phone", { 
+        message: error instanceof Error ? error.message : "发送验证码失败，请稍后重试" 
+      })
     }
   }
 
@@ -81,24 +82,48 @@ export function LoginWithPhone() {
     form.setValue("code", newCode.join(""))
   }
 
+  useEffect(() => {
+    // 添加事件监听
+    const handleClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement
+      if (target.tagName === 'BUTTON' || target.tagName === 'INPUT') {
+        e.stopPropagation()
+      }
+    }
+
+    document.addEventListener('click', handleClick)
+    return () => {
+      document.removeEventListener('click', handleClick)
+    }
+  }, [])
+
   // 表单提交处理
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true)
     try {
-      // 直接使用 json-server 的资源路径格式
-      const response = await fetch(`http://localhost:3100/users?phone=${values.phone}`)
-      const users = await response.json()
-      
-      if (!users.length) {
-        throw new Error('手机号未注册')
+      const user = await authApi.loginWithPhone({
+        phone: values.phone,
+        code: values.code
+      })
+      const userData = {
+        ...user,
+        name: user.name || user.username || '用户',
+        avatar: user.avatar || '/avatars/default.png'
       }
       
-      const user = users[0]
-      localStorage.setItem('user', JSON.stringify(user))
-      router.push('/dashboard')
+      // 先存储用户数据
+      localStorage.setItem('user', JSON.stringify(userData))
+      
+      // 使用 setTimeout 确保状态更新完成后再跳转
+      setTimeout(() => {
+        router.replace('/dashboard')
+      }, 100)
+      
     } catch (error) {
-      console.error(error)
-      form.setError('root', { message: '登录失败，请检查手机号和验证码' })
+      console.error('登录错误:', error)
+      form.setError('root', { 
+        message: error instanceof Error ? error.message : '登录失败，请检查手机号和验证码' 
+      })
     } finally {
       setIsLoading(false)
     }

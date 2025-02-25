@@ -124,6 +124,13 @@ export default function DashboardPage() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
+    const user = localStorage.getItem('user')
+    if (!user) {
+      router.replace('/login')
+    }
+  }, [router])
+
+  useEffect(() => {
     async function loadApplications() {
       if (!user) return
 

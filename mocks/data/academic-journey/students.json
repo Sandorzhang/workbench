@@ -58,5 +58,54 @@
       "createdAt": "2024-03-21T00:00:00Z",
       "updatedAt": "2024-03-21T00:00:00Z"
     }
+  ],
+  "academicJourneys": [
+    {
+      "id": 1,
+      "studentName": "张三",
+      "grade": "三年级",
+      "class": "1班",
+      "currentStatus": "正常",
+      "academicPerformance": "优秀",
+      "lastUpdated": "2024-03-10"
+    }
+  ],
+  "subjects": [
+    {
+      "code": "CHINESE",
+      "name": "语文",
+      "shortName": "语",
+      "color": "blue",
+      "icon": "BookOpen",
+      "order": 1
+    }
+  ],
+  "classes": [
+    {
+      "id": 1,
+      "tenantId": 1,
+      "name": "一年级1班",
+      "grade": "一年级",
+      "headTeacherId": 2,
+      "studentCount": 45,
+      "createdAt": "2023-09-01T00:00:00.000Z"
+    }
+  ],
+  "teachers": [
+    {
+      "id": 1,
+      "tenantId": 1,
+      "username": "teacher1",
+      "name": "张明",
+      "role": "TEACHER",
+      "subjects": ["语文", "英语"],
+      "status": "active",
+      "phone": "13800138001",
+      "email": "zhang@example.com",
+      "title": "高级教师",
+      "joinDate": "2020-09-01",
+      "education": "硕士",
+      "major": "语文教育"
+    }
   ]
 } 

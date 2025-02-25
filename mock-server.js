@@ -28,7 +28,6 @@ const getData = () => {
   const dataDir = path.join(__dirname, 'mocks/data');
   let db = {};
 
-  // 递归读取所有 JSON 文件
   const readDir = (dir) => {
     const files = fs.readdirSync(dir);
     files.forEach(file => {
@@ -39,7 +38,7 @@ const getData = () => {
         readDir(filePath);
       } else if (file.endsWith('.json')) {
         const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-        db = { ...db, ...data };
+        Object.assign(db, data);
       }
     });
   };
@@ -48,16 +47,24 @@ const getData = () => {
   return db;
 };
 
-// 创建路由
+// 创建路由和数据库实例
 const router = jsonServer.router(getData());
 
 // 使用中间件
 server.use(middlewares);
-server.use(require('./mocks/middleware'));
+server.use(jsonServer.bodyParser);
+
+// 将数据库实例添加到 app 对象中
+server.db = router.db;
+
+// 使用自定义中间件处理 API 请求
+server.use('/api', require('./mocks/middleware'));
+
+// 使用默认路由处理其他请求
 server.use('/api', router);
 
 // 启动服务器
 const port = 3100;
 server.listen(port, () => {
-  console.log(`JSON Server is running on port ${port}`);
+  console.log(`Mock Server is running on port ${port}`);
 }); 

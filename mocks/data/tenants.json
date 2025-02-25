@@ -1,0 +1,280 @@
+{
+  "tenants": [
+    {
+      "id": 1,
+      "name": "上海市长宁区天山第二小学", 
+      "shortName": "天二小",
+      "code": "TSXX",
+      "type": "PRIMARY_SCHOOL",
+      "address": "上海市长宁区天山路600号",
+      "phone": "021-12345678",
+      "logo": "https://api.dicebear.com/7.x/shapes/svg?seed=school1",
+      "applications": [
+        {
+          "id": 1,
+          "code": "dashboard",
+          "name": "工作台",
+          "description": "个人工作台",
+          "icon": "LayoutDashboard"
+        },
+        {
+          "id": 2,
+          "code": "unit-teaching",
+          "name": "单元教学管理",
+          "description": "管理教学单元、课时和教案",
+          "icon": "BookOpen"
+        },
+        {
+          "id": 3,
+          "code": "student-management",
+          "name": "学生管理",
+          "description": "管理学校的学生信息",
+          "icon": "Users"
+        },
+        {
+          "id": 4,
+          "code": "academic-journey",
+          "name": "学业旅程",
+          "description": "管理学生的学业发展轨迹",
+          "icon": "GraduationCap"
+        },
+        {
+          "id": 5,
+          "code": "chinese-writing",
+          "name": "习作批改",
+          "description": "管理语文单元习作教学和批改",
+          "icon": "PenTool"
+        },
+        {
+          "id": 6,
+          "code": "classroom-moments",
+          "name": "课堂时光机",
+          "description": "记录和分享精彩课堂时光",
+          "icon": "Camera"
+        },
+        {
+          "id": 7,
+          "code": "class-schedule",
+          "name": "课表管理",
+          "description": "管理学校课程表和时间安排",
+          "icon": "Calendar"
+        },
+        {
+          "id": 8,
+          "code": "data-category",
+          "name": "数据类目",
+          "description": "管理教学相关的数据类目",
+          "icon": "Database"
+        },
+        {
+          "id": 9,
+          "code": "class-model",
+          "name": "班级模型",
+          "description": "查看班级发展模型分析报告",
+          "icon": "BarChart"
+        },
+        {
+          "id": 10,
+          "code": "situational-assessment",
+          "name": "情境化测评",
+          "description": "智能评价情境化测评工具",
+          "icon": "Target"
+        },
+        {
+          "id": 11,
+          "code": "teacher-management",
+          "name": "教师管理",
+          "description": "管理学校教师信息和权限",
+          "icon": "GraduationCap",
+          "adminOnly": true
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "上海市徐汇区华东模范中学",
+      "shortName": "华东模范",
+      "code": "HDMF",
+      "type": "MIDDLE_SCHOOL",
+      "address": "上海市徐汇区天平路400号",
+      "phone": "021-87654321",
+      "logo": "https://api.dicebear.com/7.x/shapes/svg?seed=school2"
+    },
+    {
+      "id": 3,
+      "name": "上海市浦东新区建平中学",
+      "shortName": "建平中学",
+      "code": "JPZX",
+      "type": "HIGH_SCHOOL",
+      "address": "上海市浦东新区浦东大道2000号",
+      "phone": "021-98765432",
+      "logo": "https://api.dicebear.com/7.x/shapes/svg?seed=school3"
+    }
+  ],
+  "applications": [
+    {
+      "id": 1,
+      "code": "app-management",
+      "name": "应用权限管理",
+      "description": "管理教师用户的应用权限",
+      "icon": "Settings"
+    },
+    {
+      "id": 2,
+      "code": "unit-teaching",
+      "name": "单元教学管理",
+      "description": "管理教学单元、课时和教案",
+      "icon": "BookOpen"
+    },
+    {
+      "id": 3,
+      "code": "student-management",
+      "name": "学生管理",
+      "description": "管理学校的学生信息",
+      "icon": "Users"
+    },
+    {
+      "id": 4,
+      "code": "academic-journey",
+      "name": "学业旅程",
+      "description": "管理学生的学业发展轨迹",
+      "icon": "GraduationCap"
+    },
+    {
+      "id": 5,
+      "code": "chinese-writing",
+      "name": "习作批改",
+      "description": "管理语文单元习作教学和批改",
+      "icon": "PenTool"
+    },
+    {
+      "id": 6,
+      "code": "classroom-moments",
+      "name": "课堂时光机",
+      "description": "记录和分享精彩课堂时光",
+      "icon": "Camera"
+    },
+    {
+      "id": 7,
+      "code": "class-schedule",
+      "name": "课表管理",
+      "description": "管理学校课程表和时间安排",
+      "icon": "Calendar"
+    },
+    {
+      "id": 8,
+      "code": "data-category",
+      "name": "数据类目",
+      "description": "管理教学相关的数据类目",
+      "icon": "Database"
+    },
+    {
+      "id": 9,
+      "code": "class-model",
+      "name": "班级模型",
+      "description": "查看班级发展模型分析报告",
+      "icon": "BarChart"
+    },
+    {
+      "id": 10,
+      "code": "situational-assessment",
+      "name": "情境化测评",
+      "description": "智能评价情境化测评工具",
+      "icon": "Target"
+    },
+    {
+      "id": 11,
+      "code": "teacher-management",
+      "name": "教师管理",
+      "description": "管理学校教师信息和权限",
+      "icon": "GraduationCap",
+      "adminOnly": true
+    }
+  ],
+  "tenantApplications": [
+    {
+      "id": 1,
+      "tenantId": 1,
+      "applications": [
+        {
+          "id": 1,
+          "code": "app-management",
+          "name": "应用权限管理",
+          "description": "管理教师用户的应用权限",
+          "icon": "Settings"
+        },
+        {
+          "id": 2,
+          "code": "unit-teaching",
+          "name": "单元教学管理",
+          "description": "管理教学单元、课时和教案",
+          "icon": "BookOpen"
+        },
+        {
+          "id": 3,
+          "code": "student-management",
+          "name": "学生管理",
+          "description": "管理学校的学生信息",
+          "icon": "Users"
+        },
+        {
+          "id": 4,
+          "code": "academic-journey",
+          "name": "学业旅程",
+          "description": "管理学生的学业发展轨迹",
+          "icon": "GraduationCap"
+        },
+        {
+          "id": 5,
+          "code": "chinese-writing",
+          "name": "习作批改",
+          "description": "管理语文单元习作教学和批改",
+          "icon": "PenTool"
+        },
+        {
+          "id": 6,
+          "code": "classroom-moments",
+          "name": "课堂时光机",
+          "description": "记录和分享精彩课堂时光",
+          "icon": "Camera"
+        },
+        {
+          "id": 7,
+          "code": "class-schedule",
+          "name": "课表管理",
+          "description": "管理学校课程表和时间安排",
+          "icon": "Calendar"
+        },
+        {
+          "id": 8,
+          "code": "data-category",
+          "name": "数据类目",
+          "description": "管理教学相关的数据类目",
+          "icon": "Database"
+        },
+        {
+          "id": 9,
+          "code": "class-model",
+          "name": "班级模型",
+          "description": "查看班级发展模型分析报告",
+          "icon": "BarChart"
+        },
+        {
+          "id": 10,
+          "code": "situational-assessment",
+          "name": "情境化测评",
+          "description": "智能评价情境化测评工具",
+          "icon": "Target"
+        },
+        {
+          "id": 11,
+          "code": "teacher-management",
+          "name": "教师管理",
+          "description": "管理学校教师信息和权限",
+          "icon": "GraduationCap",
+          "adminOnly": true
+        }
+      ]
+    }
+  ]
+}

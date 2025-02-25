@@ -15,6 +15,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
+import { authApi } from '@/lib/api/auth'
 
 // 定义表单验证规则
 const formSchema = z.object({
@@ -39,21 +40,26 @@ export function LoginWithPassword() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true)
     try {
-      // 直接使用 json-server 的资源路径格式
-      const response = await fetch(`http://localhost:3100/users?username=${values.username}`)
-      const users = await response.json()
-      
-      // 在前端验证密码
-      if (!users.length || users[0].password !== values.password) {
-        throw new Error('用户名或密码错误')
+      const user = await authApi.login(values)
+      const userData = {
+        ...user,
+        name: user.name || user.username,
+        avatar: user.avatar || '/avatars/default.png'
       }
       
-      const user = users[0]
-      localStorage.setItem('user', JSON.stringify(user))
-      router.push('/dashboard')
+      // 先存储用户数据
+      localStorage.setItem('user', JSON.stringify(userData))
+      
+      // 使用 setTimeout 确保状态更新完成后再跳转
+      setTimeout(() => {
+        router.replace('/dashboard')
+      }, 100)
+      
     } catch (error) {
-      console.error(error)
-      form.setError('root', { message: '登录失败，请检查用户名和密码' })
+      console.error('登录错误:', error)
+      form.setError('root', { 
+        message: error instanceof Error ? error.message : '登录失败，请检查用户名和密码' 
+      })
     } finally {
       setIsLoading(false)
     }

@@ -2,12 +2,24 @@
 // 使用 Next.js 的 Server Component
 'use client'
 
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/common/ui/tabs"
 import { LoginWithPassword } from "@/components/features/login/login-with-password"
 import { LoginWithPhone } from "@/components/features/login/login-with-phone"
 import Image from "next/image"
 
 export default function LoginPage() {
+  const router = useRouter()
+
+  useEffect(() => {
+    // 检查是否已登录
+    const user = localStorage.getItem('user')
+    if (user) {
+      router.replace('/dashboard')
+    }
+  }, [router])
+
   return (
     <div className="flex min-h-screen w-full bg-slate-50">
       {/* 左侧大图区域 - 添加固定宽度确保不会占据过多空间 */}
