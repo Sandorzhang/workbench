@@ -18,7 +18,12 @@
     "/api/class-models/:id": "/classModels/:id",
     "/api/class-models\\?gradeId=:gradeId": "/classModels?gradeId=:gradeId",
     "/api/class-models\\?classId=:classId": "/classModels?classId=:classId",
-    "/api/class-models\\?gradeId=:gradeId&classId=:classId": "/classModels?gradeId=:gradeId&classId=:classId"
+    "/api/class-models\\?gradeId=:gradeId&classId=:classId": "/classModels?gradeId=:gradeId&classId=:classId",
+    "/api/role-permissions\\?tenantId=:tenantId": "/rolePermissions?tenantId=:tenantId",
+    "/api/role-permissions\\?roleId=:roleId&tenantId=:tenantId": "/rolePermissions?roleId=:roleId&tenantId=:tenantId",
+    "/api/role-permissions/:roleId": "/rolePermissions/:roleId",
+    "/api/user-applications\\?tenantId=:tenantId": "/userApplications?tenantId=:tenantId",
+    "/api/user-applications/:userId": "/userApplications/:userId"
   },
   "tenants": [
     {
@@ -126,6 +131,14 @@
       "name": "曹玥",
       "role": "TEACHER",
       "tenantId": 1
+    },
+    {
+      "id": 3,
+      "username": "teacher2",
+      "password": "123456",
+      "name": "李明",
+      "role": "TEACHER",
+      "tenantId": 1
     }
   ],
   "userApplications": [
@@ -133,7 +146,13 @@
       "id": 1,
       "userId": 2,
       "tenantId": 1,
-      "applicationIds": [2, 4, 5, 6, 7]
+      "applicationIds": [
+        2,
+        4,
+        5,
+        6,
+        7
+      ]
     }
   ],
   "verificationCodes": [],
@@ -1759,6 +1778,22 @@
             }
           ]
         }
+      ]
+    }
+  ],
+  "rolePermissions": [
+    {
+      "id": 1,
+      "tenantId": 1,
+      "roleId": "TEACHER",
+      "roleName": "教师",
+      "applications": [
+        2,
+        4,
+        5,
+        6,
+        7,
+        8
       ]
     }
   ]

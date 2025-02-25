@@ -23,25 +23,34 @@ export async function fetchUserApplications(): Promise<Application[]> {
 
     // 2. 根据角色判断权限
     if (user.role === 'ADMIN') {
-      // 管理员直接返回租户所有应用
       return tenantApps
     }
 
-    // 3. 教师需要检查个人权限集合
-    if (user.role === 'TEACHER') {
-      const userAppResponse = await fetch(`http://localhost:3100/userApplications?userId=${user.id}`)
-      if (!userAppResponse.ok) throw new Error('Failed to fetch user applications')
-      const userAppData = await userAppResponse.json()
-      const userApp = userAppData[0]
+    // 3. 获取角色权限
+    const roleResponse = await fetch(`http://localhost:3100/rolePermissions?roleId=${user.role}&tenantId=${user.tenantId}`)
+    if (!roleResponse.ok) throw new Error('Failed to fetch role permissions')
+    const roleData = await roleResponse.json()
+    const rolePermission = roleData[0]
 
-      // 如果没有权限配置，返回空数组
-      if (!userApp) return []
+    if (!rolePermission) return []
 
-      // 返回用户被分配的应用
-      return tenantApps.filter(app => userApp.applicationIds.includes(app.id))
+    // 4. 获取用户个人权限
+    const userAppResponse = await fetch(`http://localhost:3100/userApplications?userId=${user.id}`)
+    if (!userAppResponse.ok) throw new Error('Failed to fetch user applications')
+    const userAppData = await userAppResponse.json()
+    const userApp = userAppData[0]
+
+    // 如果没有个人权限配置，使用角色权限
+    if (!userApp) {
+      return tenantApps.filter(app => rolePermission.applications.includes(app.id))
     }
 
-    return []
+    // 5. 用户权限必须在角色权限范围内
+    const allowedApps = userApp.applicationIds.filter(appId => 
+      rolePermission.applications.includes(appId)
+    )
+
+    return tenantApps.filter(app => allowedApps.includes(app.id))
   } catch (error) {
     console.error('Error fetching applications:', error)
     return []
