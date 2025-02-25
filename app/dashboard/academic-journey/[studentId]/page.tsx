@@ -1,16 +1,17 @@
 import { Suspense } from "react"
-import StudentJourneyContent from "./content"
+import { use } from "react"
+import StudentJourneyClient from "./student-journey-client"
 
-export default function StudentJourneyPage({ params }: { params: { studentId: string } }) {
+export default function StudentJourneyPage({ params }: { params: Promise<{ studentId: string }> }) {
+  const resolvedParams = use(params)
+  
   return (
     <Suspense fallback={
-      <div className="container mx-auto py-8">
-        <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-        </div>
+      <div className="flex items-center justify-center h-[400px]">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     }>
-      <StudentJourneyContent studentId={params.studentId} />
+      <StudentJourneyClient studentId={resolvedParams.studentId} />
     </Suspense>
   )
 } 

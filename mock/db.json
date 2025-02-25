@@ -27,7 +27,11 @@
     "/api/user-applications/:userId": "/userApplications/:userId",
     "/api/teachers\\?tenantId=:tenantId": "/teachers?tenantId=:tenantId",
     "/api/teachers": "/teachers",
-    "/api/teachers/:id": "/teachers/:id"
+    "/api/teachers/:id": "/teachers/:id",
+    "/api/assessment-frameworks": "/assessmentFrameworks",
+    "/api/assessment-frameworks/:id": "/assessmentFrameworks/:id",
+    "/api/assessment-tasks": "/situationalAssessments",
+    "/api/assessment-tasks/:id": "/situationalAssessments/:id"
   },
   "tenants": [
     {
@@ -1887,9 +1891,10 @@
       "grade": "五年级",
       "class": "1班",
       "type": "阅读理解",
-      "status": "进行中",
+      "status": "in_progress",
       "deadline": "2024-04-01",
-      "completionRate": 75
+      "completionRate": 75,
+      "frameworkId": 1
     },
     {
       "id": 2,
@@ -1926,6 +1931,83 @@
       "count": 64,
       "lastUpdated": "2024-03-18",
       "status": "未使用"
+    }
+  ],
+  "assessmentFrameworks": [
+    {
+      "id": 1,
+      "name": "小学语文阅读能力评估",
+      "description": "针对小学生语文阅读理解能力的多维度评估框架",
+      "dimensions": [
+        {
+          "id": 1,
+          "name": "理解能力",
+          "weight": 40,
+          "indicators": [
+            {
+              "id": 1,
+              "name": "把握文章主旨",
+              "description": "能准确理解文章的中心思想",
+              "score": 20
+            },
+            {
+              "id": 2,
+              "name": "理解重要细节",
+              "description": "能理解文章的关键信息和细节",
+              "score": 20
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "name": "分析能力",
+          "weight": 30,
+          "indicators": [
+            {
+              "id": 3,
+              "name": "分析文章结构",
+              "description": "能分析文章的组织结构和写作手法",
+              "score": 15
+            },
+            {
+              "id": 4,
+              "name": "归纳内容要点",
+              "description": "能归纳文章的主要内容和要点",
+              "score": 15
+            }
+          ]
+        }
+      ],
+      "status": "published",
+      "createdAt": "2024-03-01",
+      "updatedAt": "2024-03-20"
+    },
+    {
+      "name": "测试",
+      "description": "1231",
+      "dimensions": [
+        {
+          "id": 1,
+          "name": "123",
+          "weight": 0,
+          "indicators": [
+            {
+              "id": 1,
+              "name": "123",
+              "description": "123123",
+              "score": 0
+            },
+            {
+              "id": 2,
+              "name": "123123",
+              "description": "123123",
+              "score": 0
+            }
+          ]
+        }
+      ],
+      "status": "draft",
+      "id": 2
     }
   ]
 }
