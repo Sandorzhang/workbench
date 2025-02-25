@@ -1,16 +1,26 @@
+/**
+ * 学科常量定义
+ */
+
 export const SUBJECTS = {
-  CHINESE: '语文',
-  MATH: '数学',
-  ENGLISH: '英语',
-  SCIENCE: '科学',
-  MORAL: '道德与法治',
-  PE: '体育与健康',
-  MUSIC: '音乐',
-  ART: '美术',
-  LABOR: '劳动',
-  PRACTICE: '综合实践活动',
-  INFORMATION: '信息科技'
-} as const
+  CHINESE: "语文",
+  MATH: "数学",
+  ENGLISH: "英语",
+  SCIENCE: "科学",
+  PHYSICS: "物理",
+  CHEMISTRY: "化学",
+  BIOLOGY: "生物",
+  HISTORY: "历史",
+  GEOGRAPHY: "地理",
+  POLITICS: "政治",
+  MORAL: "道德与法治",
+  PE: "体育与健康",
+  MUSIC: "音乐",
+  ART: "美术",
+  LABOR: "劳动",
+  PRACTICE: "综合实践活动",
+  INFORMATION: "信息科技"
+};
 
 export type SubjectType = typeof SUBJECTS[keyof typeof SUBJECTS]
 

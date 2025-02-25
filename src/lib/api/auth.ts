@@ -123,4 +123,35 @@ export const authApi = {
     
     return response.json()
   }
+}
+
+// 登录函数
+export async function login(username: string, password: string) {
+  try {
+    console.log(`Attempting to login with username: ${username}`);
+    
+    const response = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, password }),
+      cache: 'no-store'
+    });
+    
+    console.log(`Login response status: ${response.status}`);
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('Login error response:', errorData);
+      throw new Error(errorData.error || '登录失败');
+    }
+    
+    const userData = await response.json();
+    console.log('Login successful, user data received');
+    return userData;
+  } catch (error) {
+    console.error('Login function error:', error);
+    throw error;
+  }
 } 

@@ -16,6 +16,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { authApi } from '@/lib/api/auth'
+import { toast } from "@/components/common/ui/use-toast"
+import { signIn } from "next-auth/react"
 
 // 定义表单验证规则
 const formSchema = z.object({
@@ -37,33 +39,34 @@ export function LoginWithPassword() {
   })
 
   // 表单提交处理
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true)
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      const user = await authApi.login(values)
-      const userData = {
-        ...user,
-        name: user.name || user.username,
-        avatar: user.avatar || '/avatars/default.png'
-      }
+      setIsLoading(true);
+      console.log('Login form submitted:', data);
       
-      // 先存储用户数据
-      localStorage.setItem('user', JSON.stringify(userData))
+      const user = await authApi.login(data);
+      console.log('Login successful, user:', user);
       
-      // 使用 setTimeout 确保状态更新完成后再跳转
-      setTimeout(() => {
-        router.replace('/dashboard')
-      }, 100)
+      // 创建会话
+      await signIn('credentials', {
+        username: data.username,
+        password: data.password,
+        redirect: false,
+      });
       
+      // 重定向到仪表板
+      router.push('/dashboard');
     } catch (error) {
-      console.error('登录错误:', error)
-      form.setError('root', { 
-        message: error instanceof Error ? error.message : '登录失败，请检查用户名和密码' 
-      })
+      console.error('Login error:', error);
+      toast({
+        title: "登录失败",
+        description: error instanceof Error ? error.message : "用户名或密码错误",
+        variant: "destructive",
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <Form {...form}>

@@ -107,5 +107,85 @@ module.exports = function middleware(req, res, next) {
     return res.json(tenant.applications || [])
   }
 
+  // 处理获取课堂时光机记录
+  if (req.path === '/api/classroomMoments' && req.method === 'GET') {
+    const db = req.app.db
+    const moments = db.get('moments').value() || []
+    return res.json(moments)
+  }
+
+  // 处理获取单个课堂时光机记录
+  if (req.path.match(/^\/api\/classroomMoments\/\w+$/) && req.method === 'GET') {
+    const id = req.path.split('/').pop()
+    const db = req.app.db
+    
+    const moment = db.get('moments').find({ id }).value()
+    
+    if (!moment) {
+      return res.status(404).json({
+        message: '课堂记录不存在'
+      })
+    }
+    
+    return res.json(moment)
+  }
+
+  // 处理创建课堂时光机记录
+  if (req.path === '/api/classroomMoments' && req.method === 'POST') {
+    const db = req.app.db
+    const newMoment = { ...req.body }
+    
+    if (!newMoment.id) {
+      newMoment.id = Date.now().toString()
+    }
+    
+    db.get('moments').push(newMoment).write()
+    
+    return res.status(201).json(newMoment)
+  }
+
+  // 处理更新课堂时光机记录
+  if (req.path.match(/^\/api\/classroomMoments\/\w+$/) && (req.method === 'PUT' || req.method === 'PATCH')) {
+    const id = req.path.split('/').pop()
+    const db = req.app.db
+    
+    const moment = db.get('moments').find({ id }).value()
+    
+    if (!moment) {
+      return res.status(404).json({
+        message: '课堂记录不存在'
+      })
+    }
+    
+    const updatedMoment = { ...moment, ...req.body }
+    
+    db.get('moments')
+      .find({ id })
+      .assign(updatedMoment)
+      .write()
+    
+    return res.json(updatedMoment)
+  }
+
+  // 处理删除课堂时光机记录
+  if (req.path.match(/^\/api\/classroomMoments\/\w+$/) && req.method === 'DELETE') {
+    const id = req.path.split('/').pop()
+    const db = req.app.db
+    
+    const moment = db.get('moments').find({ id }).value()
+    
+    if (!moment) {
+      return res.status(404).json({
+        message: '课堂记录不存在'
+      })
+    }
+    
+    db.get('moments')
+      .remove({ id })
+      .write()
+    
+    return res.status(204).end()
+  }
+
   next()
 } 

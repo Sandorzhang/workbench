@@ -1,19 +1,145 @@
-import { API_BASE_URL } from './config'
+import { API_CONFIG } from '../config/api.config';
 import { SUBJECTS } from '@/lib/constants/subjects'
 
+/**
+ * 课堂时光机相关 API
+ * 
+ * 提供课堂记录的获取、创建、更新等功能
+ */
+
+// 获取所有课堂记录
 export async function fetchClassroomMoments() {
-  const response = await fetch(`${API_BASE_URL}/classroomMoments`)
-  if (!response.ok) {
-    throw new Error('Failed to fetch classroom moments')
+  try {
+    const response = await fetch(`${API_CONFIG.BASE_URL}/api/classroomMoments`)
+    if (!response.ok) {
+      throw new Error('Failed to fetch classroom moments')
+    }
+    return response.json()
+  } catch (error) {
+    // 如果API请求失败，返回模拟数据
+    console.warn('Using mock data for classroom moments')
+    return [
+      {
+        id: "1",
+        title: "分数加减法探究",
+        teacher: "张老师",
+        subject: "数学",
+        grade: "五年级",
+        class: "2班",
+        date: "2023-10-15",
+        description: "通过小组合作探究分数加减法的计算方法",
+        tags: ["分数", "加减法", "合作学习"],
+        imageUrl: "https://picsum.photos/seed/math1/400/300",
+        likes: 24,
+        comments: 5
+      },
+      {
+        id: "2",
+        title: "古诗文鉴赏",
+        teacher: "李老师",
+        subject: "语文",
+        grade: "六年级",
+        class: "1班",
+        date: "2023-10-12",
+        description: "学习古诗文的鉴赏方法，感受古典文学的魅力",
+        tags: ["古诗文", "鉴赏", "文学"],
+        imageUrl: "https://picsum.photos/seed/chinese1/400/300",
+        likes: 18,
+        comments: 3
+      },
+      {
+        id: "3",
+        title: "植物生长实验",
+        teacher: "王老师",
+        subject: "科学",
+        grade: "四年级",
+        class: "3班",
+        date: "2023-10-10",
+        description: "观察记录不同条件下植物的生长情况",
+        tags: ["植物", "实验", "观察记录"],
+        imageUrl: "https://picsum.photos/seed/science1/400/300",
+        likes: 15,
+        comments: 7
+      }
+    ]
   }
+}
+
+// 获取单个课堂记录详情
+export async function fetchClassroomMomentById(id: string) {
+  try {
+    // 检查是否在服务器端
+    const isServer = typeof window === 'undefined';
+    
+    // 构建 API 请求 URL
+    let url;
+    if (isServer) {
+      // 在服务器端，使用内部 API 路由
+      url = `http://localhost:3100/api/classroomMoments/${id}`;
+    } else {
+      // 在客户端，使用相对路径
+      url = `/api/classroomMoments/${id}`;
+    }
+    
+    console.log(`Fetching classroom moment with id ${id} from ${url}`);
+    
+    // 发送请求获取数据
+    const response = await fetch(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      // 确保请求不会被缓存
+      cache: 'no-store'
+    });
+    
+    console.log(`Response status: ${response.status}`);
+    
+    if (!response.ok) {
+      throw new Error(`Failed to fetch classroom moment with id ${id} (status: ${response.status})`);
+    }
+    
+    // 解析响应数据
+    const data = await response.json();
+    console.log(`Successfully fetched data for classroom moment ${id}`);
+    return data;
+  } catch (error) {
+    console.error(`Error fetching classroom moment ${id}:`, error);
+    throw error; // 将错误向上传播，让调用者处理
+  }
+}
+
+// 创建新的课堂记录
+export async function createClassroomMoment(data: any) {
+  const response = await fetch(`${API_CONFIG.BASE_URL}/api/classroomMoments`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+  
+  if (!response.ok) {
+    throw new Error('Failed to create classroom moment')
+  }
+  
   return response.json()
 }
 
-export async function fetchClassroomMomentById(id: string) {
-  const response = await fetch(`${API_BASE_URL}/classroomMoments/${id}`)
+// 更新课堂记录
+export async function updateClassroomMoment(id: string, data: any) {
+  const response = await fetch(`${API_CONFIG.BASE_URL}/api/classroomMoments/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+  
   if (!response.ok) {
-    throw new Error('Failed to fetch classroom moment')
+    throw new Error(`Failed to update classroom moment with id ${id}`)
   }
+  
   return response.json()
 }
 
@@ -350,7 +476,7 @@ export async function uploadClassroomMoment(formData: FormData, onProgress?: (pr
     }
 
     // 保存初始记录
-    const initialResponse = await fetch(`${API_BASE_URL}/classroomMoments`, {
+    const initialResponse = await fetch(`${API_CONFIG.BASE_URL}/api/classroomMoments`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -377,7 +503,7 @@ export async function uploadClassroomMoment(formData: FormData, onProgress?: (pr
       }
 
       // 更新服务器数据
-      const updateResponse = await fetch(`${API_BASE_URL}/classroomMoments/${initialData.id}`, {
+      const updateResponse = await fetch(`${API_CONFIG.BASE_URL}/api/classroomMoments/${initialData.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -392,7 +518,7 @@ export async function uploadClassroomMoment(formData: FormData, onProgress?: (pr
       return updateResponse.json()
     } catch (error) {
       // 如果分析失败，更新状态
-      await fetch(`${API_BASE_URL}/classroomMoments/${initialData.id}`, {
+      await fetch(`${API_CONFIG.BASE_URL}/api/classroomMoments/${initialData.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

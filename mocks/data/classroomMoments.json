@@ -1,0 +1,49 @@
+{
+  "classroomMoments": [
+    {
+      "id": "1",
+      "title": "分数加减法探究",
+      "teacher": "张老师",
+      "subject": "数学",
+      "grade": "五年级",
+      "class": "2班",
+      "date": "2023-10-15",
+      "description": "通过小组合作探究分数加减法的计算方法",
+      "tags": ["分数", "加减法", "合作学习"],
+      "imageUrl": "https://picsum.photos/seed/math1/400/300",
+      "likes": 24,
+      "comments": 5,
+      "analysisStatus": "completed"
+    },
+    {
+      "id": "2",
+      "title": "古诗文鉴赏",
+      "teacher": "李老师",
+      "subject": "语文",
+      "grade": "六年级",
+      "class": "1班",
+      "date": "2023-10-12",
+      "description": "学习古诗文的鉴赏方法，感受古典文学的魅力",
+      "tags": ["古诗文", "鉴赏", "文学"],
+      "imageUrl": "https://picsum.photos/seed/chinese1/400/300",
+      "likes": 18,
+      "comments": 3,
+      "analysisStatus": "completed"
+    },
+    {
+      "id": "3",
+      "title": "植物生长实验",
+      "teacher": "王老师",
+      "subject": "科学",
+      "grade": "四年级",
+      "class": "3班",
+      "date": "2023-10-10",
+      "description": "观察记录不同条件下植物的生长情况",
+      "tags": ["植物", "实验", "观察记录"],
+      "imageUrl": "https://picsum.photos/seed/science1/400/300",
+      "likes": 15,
+      "comments": 7,
+      "analysisStatus": "completed"
+    }
+  ]
+} 
