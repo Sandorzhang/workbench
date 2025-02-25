@@ -10,15 +10,30 @@ export function useAuth() {
   useEffect(() => {
     const currentUser = getUser()
     if (currentUser) {
+      if (!currentUser.id || !currentUser.role || !currentUser.tenantId) {
+        console.error('Invalid user data:', currentUser)
+        return
+      }
       setUser(currentUser)
     }
   }, [])
 
   const hasPermission = (permission: string) => {
     if (!user) return false
-    // 管理员拥有所有权限
     if (user.role === 'ADMIN') return true
-    // TODO: 检查用户的具体权限
+    // 教师默认拥有基本权限
+    if (user.role === 'TEACHER') {
+      const teacherDefaultPermissions = [
+        'view_units',
+        'view_academic_journey',
+        'view_writings',
+        'view_moments',
+        'view_schedule',
+        'view_class_model',
+        'view_assessment'
+      ]
+      return teacherDefaultPermissions.includes(permission)
+    }
     return false
   }
 

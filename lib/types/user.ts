@@ -1,7 +1,6 @@
 export interface User {
-  id: string
+  id: string | number
   role: 'ADMIN' | 'TEACHER' | 'STUDENT'
   name: string
   tenantId: number
-  permissions?: string[]
 } 

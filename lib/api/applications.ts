@@ -13,12 +13,18 @@ export function filterNavItemsByPermission(
   userRole?: string,
   userApps?: any[]
 ) {
-  if (!userRole || !userApps) return []
-  return navItems.filter(item => {
-    if (item.role && !item.role.includes(userRole)) return false
-    if (item.appCode) {
-      return userApps.some(app => app.applicationIds.includes(item.appCode))
-    }
-    return true
-  })
+  if (!userRole) return []
+  
+  // 管理员可以访问所有导航项
+  if (userRole === 'ADMIN') return navItems
+  
+  // 教师根据分配的应用权限过滤
+  if (userRole === 'TEACHER' && userApps) {
+    return navItems.filter(item => {
+      if (!item.appCode) return true
+      return userApps.some(app => app.code === item.appCode)
+    })
+  }
+  
+  return []
 }

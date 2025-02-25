@@ -52,65 +52,59 @@ interface Application {
   name: string
   description: string
   icon: string
-  features: {
-    id: number
-    code: string
-    name: string
-  }[]
 }
 
 export default function DashboardPage() {
   const router = useRouter()
   const { toast } = useToast()
-  const { hasPermission } = useAuth()
+  const { user } = useAuth()
   const [applications, setApplications] = useState<Application[]>([])
   const [tenant, setTenant] = useState<Tenant | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
+    async function loadApplications() {
+      if (!user) return
+
+      try {
+        setIsLoading(true)
+        const [apps, tenantData] = await Promise.all([
+          fetchUserApplications(),
+          fetchCurrentTenant()
+        ])
+        setApplications(apps)
+        setTenant(tenantData)
+      } catch (error) {
+        console.error('加载应用失败:', error)
+        toast({
+          variant: "destructive",
+          title: "错误",
+          description: "加载数据失败"
+        })
+        setApplications([])
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
     loadApplications()
-  }, [])
+  }, [user, toast])
 
-  const loadApplications = async () => {
-    try {
-      const apps = await fetchUserApplications()
-      setApplications(apps)
-      const tenantData = await fetchCurrentTenant()
-      setTenant(tenantData)
-    } catch (error) {
-      console.error('加载应用失败:', error)
-      toast({
-        variant: "destructive",
-        title: "错误",
-        description: "加载数据失败"
-      })
-    }
+  if (isLoading) {
+    return <div>加载中...</div>
   }
 
-  // 检查用户是否有权限访问应用
-  const canAccessApp = (app: Application) => {
-    const permissionMap: Record<string, string> = {
-      'academic-journey': 'view_academic_journey',
-      'class-schedule': 'view_schedule',
-      'class-model': 'view_class_model',
-      'unit-teaching': 'view_units',
-      'chinese-writing': 'view_writings',
-      'classroom-moments': 'view_moments',
-      'data-category': 'view_categories',
-      'student-management': 'view_students',
-      'app-management': 'view_apps',
-      'situational-assessment': 'view_assessment'
-    }
-
-    const requiredPermission = permissionMap[app.code]
-    return requiredPermission ? hasPermission(requiredPermission) : false
+  if (!user) {
+    return <div>请先登录</div>
   }
 
-  // 按分类对应用进行分组，并过滤掉无权限的应用
-  const categorizedApps = Object.values(APP_CATEGORIES).map(category => ({
-    ...category,
-    apps: applications
-      .filter(app => category.apps.includes(app.code) && canAccessApp(app))
-  })).filter(category => category.apps.length > 0)
+  // 按分类组织应用
+  const categorizedApps = Object.values(APP_CATEGORIES)
+    .map(category => ({
+      ...category,
+      apps: applications.filter(app => category.apps.includes(app.code))
+    }))
+    .filter(category => category.apps.length > 0)
 
   // 获取应用的图标组件
   const getAppIcon = (iconName: string) => {
@@ -132,7 +126,25 @@ export default function DashboardPage() {
       Target
     }
     const Icon = icons[iconName as keyof typeof icons]
-    return Icon ? <Icon className="h-6 w-6" /> : null
+    // 为每个图标定义特定的颜色
+    const iconColors: Record<string, string> = {
+      GraduationCap: "text-blue-500",
+      Calendar: "text-indigo-500",
+      BarChart: "text-purple-500",
+      Settings: "text-slate-500",
+      BookOpen: "text-emerald-500",
+      Users: "text-cyan-500",
+      PenTool: "text-violet-500",
+      Camera: "text-rose-500",
+      Database: "text-amber-500",
+      Layers: "text-lime-500",
+      FileText: "text-teal-500",
+      Clock: "text-sky-500",
+      School: "text-green-500",
+      ChartPie: "text-orange-500",
+      Target: "text-red-500"
+    }
+    return Icon ? <Icon className={cn("h-6 w-6", iconColors[iconName])} /> : null
   }
 
   return (
@@ -194,11 +206,6 @@ export default function DashboardPage() {
                     </div>
                   </div>
                 </CardHeader>
-                <CardContent className="pt-0">
-                  <div className="text-sm text-muted-foreground">
-                    {app.features.map(feature => feature.name).join('、')}
-                  </div>
-                </CardContent>
               </Card>
             ))}
           </div>
