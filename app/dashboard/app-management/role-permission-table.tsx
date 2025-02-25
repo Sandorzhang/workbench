@@ -33,7 +33,9 @@ export function RolePermissionTable({ data, onUpdate }: RolePermissionTableProps
     async function loadApplications() {
       try {
         const apps = await fetchUserApplications()
-        setApplications(apps)
+        // 过滤掉应用权限管理应用
+        const filteredApps = apps.filter(app => app.id !== 1)
+        setApplications(filteredApps)
       } catch (error) {
         console.error('加载应用列表失败:', error)
       }

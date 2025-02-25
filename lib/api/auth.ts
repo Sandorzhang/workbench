@@ -1,11 +1,12 @@
 import { API_BASE_URL } from './config'
 
-interface Application {
+export interface Application {
   id: number
   code: string
   name: string
   description: string
   icon: string
+  adminOnly: boolean
 }
 
 export async function fetchUserApplications(): Promise<Application[]> {
@@ -15,7 +16,7 @@ export async function fetchUserApplications(): Promise<Application[]> {
   const user = JSON.parse(userStr)
   
   try {
-    // 1. 获取租户的所有应用（确定最大权限集合）
+    // 1. 获取租户的所有应用
     const tenantAppResponse = await fetch(`http://localhost:3100/tenantApplications?tenantId=${user.tenantId}`)
     if (!tenantAppResponse.ok) throw new Error('Failed to fetch tenant applications')
     const tenantAppData = await tenantAppResponse.json()
@@ -40,9 +41,12 @@ export async function fetchUserApplications(): Promise<Application[]> {
     const userAppData = await userAppResponse.json()
     const userApp = userAppData[0]
 
+    // 过滤掉管理员专属应用
+    const nonAdminApps = tenantApps.filter(app => !app.adminOnly)
+
     // 如果没有个人权限配置，使用角色权限
     if (!userApp) {
-      return tenantApps.filter(app => rolePermission.applications.includes(app.id))
+      return nonAdminApps.filter(app => rolePermission.applications.includes(app.id))
     }
 
     // 5. 用户权限必须在角色权限范围内
@@ -50,7 +54,7 @@ export async function fetchUserApplications(): Promise<Application[]> {
       rolePermission.applications.includes(appId)
     )
 
-    return tenantApps.filter(app => allowedApps.includes(app.id))
+    return nonAdminApps.filter(app => allowedApps.includes(app.id))
   } catch (error) {
     console.error('Error fetching applications:', error)
     return []
