@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Card, CardContent } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Card, CardContent } from "@/components/common/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/common/ui/tabs"
 import { useToast } from "@/hooks/use-toast"
 import { useAuth } from "@/hooks/use-auth"
 import { Loader2, Settings } from "lucide-react"
@@ -17,7 +17,7 @@ import {
 import { RolePermissionTable } from './role-permission-table'
 import { UserPermissionTable } from './user-permission-table'
 import { cn } from "@/lib/types/utils"
-import { PageHeader } from "@/components/page-header"
+import { PageHeader } from "@/components/common/layout/page-header"
 
 export default function AppManagementPage() {
   const { user } = useAuth()

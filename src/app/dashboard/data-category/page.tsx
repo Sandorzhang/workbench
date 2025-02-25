@@ -1,13 +1,13 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { PageHeader } from "@/components/page-header"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/common/ui/card"
+import { Badge } from "@/components/common/ui/badge"
+import { PageHeader } from "@/components/common/layout/page-header"
 import { Database, Filter, Plus, Loader2, FolderTree } from 'lucide-react'
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/common/ui/button"
 import { cn } from "@/lib/types/utils"
-import { PageContainer } from "@/components/dashboard/page-container"
+import { PageContainer } from "@/components/features/dashboard/page-container"
 
 interface Category {
   id: number

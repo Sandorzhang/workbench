@@ -1,16 +1,16 @@
 'use client'
 
 import { useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/common/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/common/ui/tabs"
 import { Calendar, School, Users, Settings } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { ScheduleGrid } from "@/components/class-schedule/schedule-grid"
-import { GradeSelector } from "@/components/class-schedule/grade-selector"
-import { ClassSelector } from "@/components/class-schedule/class-selector"
+import { Button } from "@/components/common/ui/button"
+import { ScheduleGrid } from "@/components/features/class-schedule/schedule-grid"
+import { GradeSelector } from "@/components/features/class-schedule/grade-selector"
+import { ClassSelector } from "@/components/features/class-schedule/class-selector"
 import { useAuth } from "@/hooks/use-auth"
 import { useRouter } from "next/navigation"
-import { PageHeader } from "@/components/page-header"
+import { PageHeader } from "@/components/common/layout/page-header"
 import { cn } from "@/lib/types/utils"
 
 export default function ClassSchedulePage() {

@@ -1,11 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/common/ui/dialog"
+import { Input } from "@/components/common/ui/input"
+import { Button } from "@/components/common/ui/button"
+import { Label } from "@/components/common/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/common/ui/select"
 import { createTeacher, updateTeacher, type Teacher } from "@/lib/api/teacher"
 import { useToast } from "@/hooks/use-toast"
 

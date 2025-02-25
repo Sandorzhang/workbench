@@ -1,12 +1,12 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Switch } from "@/components/ui/switch"
-import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Input } from "@/components/ui/input"
+import { Card, CardContent } from "@/components/common/ui/card"
+import { Button } from "@/components/common/ui/button"
+import { Switch } from "@/components/common/ui/switch"
+import { Badge } from "@/components/common/ui/badge"
+import { Avatar, AvatarFallback } from "@/components/common/ui/avatar"
+import { Input } from "@/components/common/ui/input"
 import { Search } from "lucide-react"
 import { fetchUserApplications } from '@/lib/api/auth'
 import type { Application } from '@/lib/api/auth'

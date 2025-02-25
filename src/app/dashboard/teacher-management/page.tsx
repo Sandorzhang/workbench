@@ -1,9 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/common/ui/card"
+import { Input } from "@/components/common/ui/input"
+import { Button } from "@/components/common/ui/button"
 import { 
   Table, 
   TableBody, 
@@ -11,8 +11,8 @@ import {
   TableHead, 
   TableHeader, 
   TableRow 
-} from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
+} from "@/components/common/ui/table"
+import { Badge } from "@/components/common/ui/badge"
 import { useToast } from "@/hooks/use-toast"
 import { useAuth } from "@/hooks/use-auth"
 import { 
@@ -33,9 +33,9 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/common/ui/dropdown-menu"
 import { cn } from "@/lib/types/utils"
-import { PageHeader } from "@/components/page-header"
+import { PageHeader } from "@/components/common/layout/page-header"
 
 export default function TeacherManagementPage() {
   const { user } = useAuth()

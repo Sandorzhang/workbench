@@ -9,12 +9,12 @@
 'use client'
 
 import { useState, useEffect } from "react"
-import { PageHeader } from "@/components/page-header"
-import { PageContainer } from "@/components/dashboard/page-container"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { PageHeader } from "@/components/common/layout/page-header"
+import { PageContainer } from "@/components/features/dashboard/page-container"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/common/ui/tabs"
 import { AssessmentFramework } from "@/lib/types/assessment"
 import { fetchFrameworks } from "@/lib/api/assessment"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/common/ui/button"
 import { Plus, Scale } from "lucide-react"
 import Link from "next/link"
 import { ROUTES } from '@/lib/constants/routes'

@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/common/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/common/ui/tabs"
+import { Button } from "@/components/common/ui/button"
 import { Plus, Search, Trash2 } from 'lucide-react'
-import { Input } from "@/components/ui/input"
+import { Input } from "@/components/common/ui/input"
 import { toast } from "@/hooks/use-toast"
 import { ApiService } from '@/lib/api-service'
-import { PageHeader } from "@/components/page-header"
+import { PageHeader } from "@/components/common/layout/page-header"
 import { Users } from "lucide-react"
 import { cn } from "@/lib/types/utils"
 
