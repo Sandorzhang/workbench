@@ -12,10 +12,37 @@ import { fetchUserApplications } from '@/lib/api/auth'
 import type { Application } from '@/lib/api/auth'
 import { fetchRolePermissions, type RolePermission, type UserPermission } from '@/lib/api/app-management'
 import { useAuth } from '@/hooks/use-auth'
+import { 
+  BookOpen, 
+  GraduationCap, 
+  PenTool, 
+  Camera, 
+  Calendar, 
+  Database,
+  BarChart,
+  Target,
+  Users,
+  Settings,
+  type LucideIcon
+} from "lucide-react"
 
 interface UserPermissionTableProps {
   data: UserPermission[]
   onUpdate: (userId: number, applications: number[]) => void
+}
+
+// 应用图标映射
+const APP_ICONS: Record<string, LucideIcon> = {
+  'app-management': Settings,
+  'unit-teaching': BookOpen,
+  'academic-journey': GraduationCap,
+  'chinese-writing': PenTool,
+  'classroom-moments': Camera,
+  'class-schedule': Calendar,
+  'data-category': Database,
+  'class-model': BarChart,
+  'situational-assessment': Target,
+  'student-management': Users
 }
 
 export function UserPermissionTable({ data, onUpdate }: UserPermissionTableProps) {
