@@ -1,11 +1,11 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useToast } from "@/hooks/use-toast"
 import { useAuth } from "@/hooks/use-auth"
-import { Loader2 } from "lucide-react"
+import { Loader2, Settings } from "lucide-react"
 import { 
   fetchRolePermissions, 
   updateRolePermissions, 
@@ -16,6 +16,8 @@ import {
 } from '@/lib/api/app-management'
 import { RolePermissionTable } from './role-permission-table'
 import { UserPermissionTable } from './user-permission-table'
+import { cn } from "@/lib/utils"
+import { PageHeader } from "@/components/page-header"
 
 export default function AppManagementPage() {
   const { user } = useAuth()
@@ -55,12 +57,12 @@ export default function AppManagementPage() {
     return (
       <div className="flex h-[calc(100vh-4rem)] items-center justify-center">
         <Card className="w-[400px]">
-          <CardHeader>
-            <CardTitle className="text-center text-red-500">访问受限</CardTitle>
-            <CardDescription className="text-center">
-              您没有权限访问此页面
-            </CardDescription>
-          </CardHeader>
+          <CardContent className="py-16">
+            <div className="text-center text-muted-foreground">
+              <p className="text-lg">访问受限</p>
+              <p className="text-sm mt-1">您没有权限访问此页面</p>
+            </div>
+          </CardContent>
         </Card>
       </div>
     )
@@ -75,23 +77,22 @@ export default function AppManagementPage() {
   }
 
   return (
-    <div className="container mx-auto py-8 space-y-8">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">应用权限管理</h1>
-          <p className="text-muted-foreground">
-            管理教师用户对各个应用的访问权限
-          </p>
-        </div>
-      </div>
+    <div className="container mx-auto py-8">
+      <PageHeader
+        title="应用权限管理"
+        description="管理教师用户对各个应用的访问权限"
+        icon={Settings}
+        className="bg-white/50 mb-6"
+      />
 
-      <Card>
-        <CardContent className="p-6">
-          <Tabs defaultValue="roles" className="space-y-6">
-            <TabsList className="grid w-[400px] grid-cols-2">
-              <TabsTrigger value="roles">角色权限配置</TabsTrigger>
-              <TabsTrigger value="users">用户权限配置</TabsTrigger>
-            </TabsList>
+      <Tabs defaultValue="roles">
+        <TabsList className="mb-4">
+          <TabsTrigger value="roles">角色权限配置</TabsTrigger>
+          <TabsTrigger value="users">用户权限配置</TabsTrigger>
+        </TabsList>
+
+        <Card className="overflow-hidden border-none shadow-md">
+          <CardContent className="p-6">
             <TabsContent value="roles" className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
@@ -105,7 +106,6 @@ export default function AppManagementPage() {
                 data={rolePermissions}
                 onUpdate={async (roleId, apps) => {
                   if (!user?.tenantId) return
-
                   try {
                     await updateRolePermissions(user.tenantId, roleId, apps)
                     toast({ title: "成功", description: "角色权限更新成功" })
@@ -119,6 +119,7 @@ export default function AppManagementPage() {
                 }}
               />
             </TabsContent>
+            
             <TabsContent value="users" className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
@@ -133,13 +134,10 @@ export default function AppManagementPage() {
                 onUpdate={async (userId, apps) => {
                   try {
                     await updateUserPermissions(userId, apps)
-                    
-                    // 重新加载权限数据
                     if (user?.tenantId) {
                       const updatedPermissions = await fetchUserPermissions(user.tenantId)
                       setUserPermissions(updatedPermissions)
                     }
-
                     toast({ 
                       title: "成功", 
                       description: "用户权限更新成功",
@@ -156,9 +154,9 @@ export default function AppManagementPage() {
                 }}
               />
             </TabsContent>
-          </Tabs>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </Tabs>
     </div>
   )
 } 

@@ -1,3 +1,21 @@
+import { API_BASE_URL } from './config'
+
+export interface Application {
+  id: number
+  code: string
+  name: string
+  description: string
+  icon: string
+  adminOnly?: boolean
+}
+
+export async function fetchUserApplications(): Promise<Application[]> {
+  const response = await fetch(`${API_BASE_URL}/tenant-applications`)
+  if (!response.ok) throw new Error('Failed to fetch applications')
+  const data = await response.json()
+  return data[0]?.applications || []
+}
+
 export async function getUserApplications(userId: string) {
   if (!userId) return []
   

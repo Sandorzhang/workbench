@@ -1,126 +1,187 @@
 'use client'
 
-import { useEffect, useState } from "react"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { UnitCard } from "@/components/chinese-writing/unit-card"
-import { fetchWritingUnits } from "@/lib/api/chinese-writing"
-import type { WritingUnit } from "@/lib/api/chinese-writing"
-import { useToast } from "@/hooks/use-toast"
-import { useRouter } from "next/navigation"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
-import { BookOpen, ClipboardList } from "lucide-react"
+import { useState } from 'react'
+import { Card, CardContent } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { 
+  PenTool, 
+  Search, 
+  Plus,
+  Filter,
+  BookOpen,
+  Calendar,
+  Users,
+  CheckCircle2,
+  Clock,
+  MoreHorizontal 
+} from 'lucide-react'
+import { Badge } from "@/components/ui/badge"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { PageHeader } from "@/components/page-header"
+import { cn } from "@/lib/utils"
 
-const GRADES = ['三年级', '四年级', '五年级', '六年级']
-const TERMS = ['第一学期', '第二学期']
+// 习作状态类型
+type WritingStatus = 'pending' | 'in_progress' | 'completed'
+
+// 习作状态配置
+const STATUS_CONFIG: Record<WritingStatus, { label: string, variant: "default" | "secondary" | "outline" }> = {
+  pending: { label: '待批改', variant: 'secondary' },
+  in_progress: { label: '批改中', variant: 'default' },
+  completed: { label: '已完成', variant: 'outline' }
+}
 
 export default function ChineseWritingPage() {
-  const [selectedGrade, setSelectedGrade] = useState('三年级')
-  const [selectedTerm, setSelectedTerm] = useState(1)
-  const [units, setUnits] = useState<WritingUnit[]>([])
-  const [loading, setLoading] = useState(true)
-  const { toast } = useToast()
-  const router = useRouter()
-
-  useEffect(() => {
-    loadUnits()
-  }, [selectedGrade, selectedTerm, toast])
-
-  const loadUnits = async () => {
-    try {
-      setLoading(true)
-      const data = await fetchWritingUnits(selectedGrade, selectedTerm)
-      setUnits(data)
-    } catch (error) {
-      console.error('Error loading units:', error)
-      toast({
-        variant: "destructive",
-        title: "错误",
-        description: error instanceof Error ? error.message : "加载习作单元失败，请稍后重试"
-      })
-    } finally {
-      setLoading(false)
-    }
-  }
+  const [activeTab, setActiveTab] = useState('writings')
+  const [searchQuery, setSearchQuery] = useState('')
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold">语文单元习作</h1>
-          <p className="text-muted-foreground">管理和批改学生的单元习作</p>
-        </div>
-        <div className="flex items-center gap-4">
-          <Button
-            variant="outline"
-            onClick={() => router.push('/dashboard/chinese-writing/records')}
-            className="gap-2"
-          >
-            <ClipboardList className="h-4 w-4" />
-            评价记录
-          </Button>
-          <div className="p-2 bg-primary/10 rounded-full">
-            <BookOpen className="h-6 w-6 text-primary" />
+    <div className="container mx-auto py-8 space-y-8">
+      <PageHeader
+        title="习作批改"
+        description="管理语文单元习作教学和批改"
+        icon={PenTool}
+        className="bg-white/50"
+        action={
+          <div className="flex items-center gap-4">
+            <Button 
+              variant="outline"
+              size="sm"
+              className={cn(
+                "bg-white/50 hover:bg-white/80",
+                "transition-all duration-300"
+              )}
+            >
+              <Filter className="h-4 w-4 mr-2" />
+              筛选
+            </Button>
+            <Button
+              className={cn(
+                "bg-gradient-to-r from-primary to-primary/90",
+                "hover:from-primary/90 hover:to-primary",
+                "transition-all duration-300",
+                "shadow-lg shadow-primary/20"
+              )}
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              布置习作
+            </Button>
           </div>
-        </div>
-      </div>
+        }
+      />
 
-      <Card>
-        <CardHeader>
-          <CardTitle>筛选条件</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div>
-            <h3 className="text-sm font-medium mb-2">年级</h3>
-            <Tabs value={selectedGrade} onValueChange={setSelectedGrade}>
-              <TabsList className="grid grid-cols-2 md:grid-cols-4 w-full">
-                {GRADES.map(grade => (
-                  <TabsTrigger key={grade} value={grade}>{grade}</TabsTrigger>
-                ))}
+      <Card className="overflow-hidden border-none shadow-md">
+        <CardContent className="p-6">
+          <Tabs defaultValue="writings" className="space-y-6" onValueChange={setActiveTab}>
+            <div className="flex items-center justify-between">
+              <TabsList>
+                <TabsTrigger value="writings">习作管理</TabsTrigger>
+                <TabsTrigger value="templates">批改模板</TabsTrigger>
+                <TabsTrigger value="analytics">数据分析</TabsTrigger>
               </TabsList>
-            </Tabs>
-          </div>
-          <Separator />
-          <div>
-            <h3 className="text-sm font-medium mb-2">学期</h3>
-            <Tabs value={String(selectedTerm)} onValueChange={value => setSelectedTerm(Number(value))}>
-              <TabsList className="grid grid-cols-2 w-full">
-                {TERMS.map((term, index) => (
-                  <TabsTrigger key={term} value={String(index + 1)}>{term}</TabsTrigger>
+              <div className="flex items-center space-x-2">
+                <div className="relative w-64">
+                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  <Input
+                    placeholder="搜索习作..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-9 bg-white/50"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <TabsContent value="writings" className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {Array.from({length: 6}).map((_, i) => (
+                  <Card key={i} className={cn(
+                    "group transition-all duration-200",
+                    "hover:shadow-md hover:scale-[1.02]",
+                    "border border-border/50"
+                  )}>
+                    <CardContent className="p-6">
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <h3 className="font-medium">记叙文写作</h3>
+                          <p className="text-sm text-muted-foreground mt-1">
+                            第{i + 1}单元 | 三年级上学期
+                          </p>
+                        </div>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem>查看详情</DropdownMenuItem>
+                            <DropdownMenuItem>开始批改</DropdownMenuItem>
+                            <DropdownMenuItem>导出报告</DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
+
+                      <div className="mt-4 space-y-2">
+                        <div className="flex items-center text-sm text-muted-foreground">
+                          <BookOpen className="h-4 w-4 mr-2" />
+                          《难忘的一天》
+                        </div>
+                        <div className="flex items-center text-sm text-muted-foreground">
+                          <Calendar className="h-4 w-4 mr-2" />
+                          截止日期：2024-03-15
+                        </div>
+                        <div className="flex items-center text-sm text-muted-foreground">
+                          <Users className="h-4 w-4 mr-2" />
+                          已提交：32/45
+                        </div>
+                        <div className="flex items-center text-sm text-muted-foreground">
+                          <CheckCircle2 className="h-4 w-4 mr-2" />
+                          已批改：28份
+                        </div>
+                      </div>
+
+                      <div className="mt-4 flex items-center justify-between">
+                        <Badge 
+                          variant={STATUS_CONFIG[['pending', 'in_progress', 'completed'][i % 3] as WritingStatus].variant}
+                          className={cn(
+                            "bg-white/50",
+                            STATUS_CONFIG[['pending', 'in_progress', 'completed'][i % 3] as WritingStatus].variant === 'default' && "bg-primary/10"
+                          )}
+                        >
+                          {STATUS_CONFIG[['pending', 'in_progress', 'completed'][i % 3] as WritingStatus].label}
+                        </Badge>
+                        <div className="flex items-center text-sm text-muted-foreground">
+                          <Clock className="h-4 w-4 mr-1" />
+                          剩余 3 天
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
                 ))}
-              </TabsList>
-            </Tabs>
-          </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="templates">
+              <div className="text-center py-8 text-muted-foreground">
+                批改模板功能开发中...
+              </div>
+            </TabsContent>
+
+            <TabsContent value="analytics">
+              <div className="text-center py-8 text-muted-foreground">
+                数据分析功能开发中...
+              </div>
+            </TabsContent>
+          </Tabs>
         </CardContent>
       </Card>
-
-      {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {[...Array(4)].map((_, i) => (
-            <Card key={i} className="h-[300px] animate-pulse">
-              <div className="w-full h-48 bg-muted rounded-t-lg" />
-              <CardContent className="p-4">
-                <div className="h-4 w-3/4 bg-muted rounded" />
-                <div className="h-4 w-1/2 bg-muted rounded mt-2" />
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {units.map((unit) => (
-            <UnitCard
-              key={unit.id}
-              id={unit.id}
-              title={unit.title}
-              coverImage={unit.coverImage}
-              description={unit.description}
-              status={unit.status}
-            />
-          ))}
-        </div>
-      )}
     </div>
   )
 } 

@@ -1,25 +1,18 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import Link from "next/link"
-import { PageHeader } from "@/components/page-header"
-import { GraduationCap, Filter, LineChart } from 'lucide-react'
 import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { GraduationCap, Filter, LineChart } from 'lucide-react'
+import { PageHeader } from "@/components/page-header"
 import { cn } from "@/lib/utils"
+import Link from "next/link"
 
-export default function AcademicJourneyPage() {
-  const [academicData, setAcademicData] = useState([])
+interface AcademicJourneyClientProps {
+  academicData: any[]
+}
 
-  useEffect(() => {
-    // 从 mock API 获取数据
-    fetch('http://localhost:3100/academicJourneys')
-      .then(res => res.json())
-      .then(data => setAcademicData(data))
-      .catch(err => console.error('加载数据失败:', err))
-  }, [])
-
+export function AcademicJourneyClient({ academicData }: AcademicJourneyClientProps) {
   return (
     <div className="container mx-auto py-8">
       <PageHeader
@@ -56,7 +49,7 @@ export default function AcademicJourneyPage() {
       />
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {academicData.map((student: any) => (
+        {academicData.map((student) => (
           <Link 
             href={`/dashboard/academic-journey/${student.id}`}
             key={student.id}

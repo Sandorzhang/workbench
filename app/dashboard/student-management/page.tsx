@@ -9,6 +9,9 @@ import { Plus, Search, Trash2 } from 'lucide-react'
 import { Input } from "@/components/ui/input"
 import { toast } from "@/hooks/use-toast"
 import { ApiService } from '@/lib/api-service'
+import { PageHeader } from "@/components/page-header"
+import { Users } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 interface Student {
   id: number
@@ -31,6 +34,7 @@ interface Class {
 }
 
 export default function StudentManagementPage() {
+  const router = useRouter()
   const [students, setStudents] = useState<Student[]>([])
   const [classes, setClasses] = useState<Class[]>([])
   const [searchTerm, setSearchTerm] = useState('')
@@ -125,88 +129,108 @@ export default function StudentManagementPage() {
   )
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold">学生管理</h1>
-        <p className="text-muted-foreground">管理学校的学生信息</p>
-      </div>
+    <div className="container mx-auto py-8 space-y-8">
+      <PageHeader
+        title="学生管理"
+        description="管理学校学生信息和班级分配"
+        icon={Users}
+        className="bg-white/50"
+        action={
+          <Button 
+            onClick={() => router.push('/dashboard/student-management/new')}
+            className={cn(
+              "bg-gradient-to-r from-primary to-primary/90",
+              "hover:from-primary/90 hover:to-primary",
+              "transition-all duration-300",
+              "shadow-lg shadow-primary/20"
+            )}
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            添加学生
+          </Button>
+        }
+      />
 
-      <Tabs defaultValue="students" className="space-y-4" onValueChange={setActiveTab}>
-        <TabsList>
-          <TabsTrigger value="students">学生列表</TabsTrigger>
-          <TabsTrigger value="classes">班级管理</TabsTrigger>
-        </TabsList>
+      <Card className="overflow-hidden border-none shadow-md">
+        <CardContent className="p-6">
+          <Tabs defaultValue="students" className="space-y-4" onValueChange={setActiveTab}>
+            <TabsList>
+              <TabsTrigger value="students">学生列表</TabsTrigger>
+              <TabsTrigger value="classes">班级管理</TabsTrigger>
+            </TabsList>
 
-        <TabsContent value="students" className="space-y-4">
-          <div className="flex justify-between items-center">
-            <div className="relative w-64">
-              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="搜索学生..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-8"
-              />
-            </div>
-            <Button onClick={handleCreateStudent}>
-              <Plus className="h-4 w-4 mr-2" />
-              添加学生
-            </Button>
-          </div>
+            <TabsContent value="students" className="space-y-4">
+              <div className="flex justify-between items-center">
+                <div className="relative w-64">
+                  <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="搜索学生..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-8"
+                  />
+                </div>
+                <Button onClick={handleCreateStudent}>
+                  <Plus className="h-4 w-4 mr-2" />
+                  添加学生
+                </Button>
+              </div>
 
-          <div className="grid gap-4">
-            {filteredStudents.map(student => (
-              <Card key={student.id}>
-                <CardContent className="p-4 flex justify-between items-center">
-                  <div>
-                    <h3 className="font-medium">{student.name}</h3>
-                    <p className="text-sm text-muted-foreground">
-                      学号：{student.studentId} | {student.grade}{student.class}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      监护人：{student.guardianName} ({student.guardianPhone})
-                    </p>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button variant="outline">查看详情</Button>
-                    <Button 
-                      variant="destructive" 
-                      size="icon"
-                      onClick={() => handleDeleteStudent(student.id)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </TabsContent>
+              <div className="grid gap-4">
+                {filteredStudents.map(student => (
+                  <Card key={student.id}>
+                    <CardContent className="p-4 flex justify-between items-center">
+                      <div>
+                        <h3 className="font-medium">{student.name}</h3>
+                        <p className="text-sm text-muted-foreground">
+                          学号：{student.studentId} | {student.grade}{student.class}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          监护人：{student.guardianName} ({student.guardianPhone})
+                        </p>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button variant="outline">查看详情</Button>
+                        <Button 
+                          variant="destructive" 
+                          size="icon"
+                          onClick={() => handleDeleteStudent(student.id)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </TabsContent>
 
-        <TabsContent value="classes" className="space-y-4">
-          <div className="flex justify-end">
-            <Button onClick={handleCreateClass}>
-              <Plus className="h-4 w-4 mr-2" />
-              创建班级
-            </Button>
-          </div>
+            <TabsContent value="classes" className="space-y-4">
+              <div className="flex justify-end">
+                <Button onClick={handleCreateClass}>
+                  <Plus className="h-4 w-4 mr-2" />
+                  创建班级
+                </Button>
+              </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {classes.map(cls => (
-              <Card key={cls.id}>
-                <CardHeader>
-                  <CardTitle>{cls.name}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground">
-                    学生人数：{cls.studentCount}
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </TabsContent>
-      </Tabs>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {classes.map(cls => (
+                  <Card key={cls.id}>
+                    <CardHeader>
+                      <CardTitle>{cls.name}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm text-muted-foreground">
+                        学生人数：{cls.studentCount}
+                      </p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </TabsContent>
+          </Tabs>
+        </CardContent>
+      </Card>
     </div>
   )
 } 

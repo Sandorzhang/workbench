@@ -1,204 +1,166 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
-import { FileIcon, Plus } from 'lucide-react'
-import { toast } from "@/hooks/use-toast"
-import { useRouter } from 'next/navigation'
-
-interface TeachingUnit {
-  id: number
-  name: string
-  subject: string
-  grade: string
-  description: string
-  createdAt: string
-}
-
-interface TeachingPlan {
-  id: number
-  unitId: number | null // null 表示独立教案
-  name: string
-  description: string
-  fileUrl: string
-  fileType: string
-  uploadedAt: string
-  createdBy: number
-}
+import { Input } from "@/components/ui/input"
+import { 
+  BookOpen, 
+  Search, 
+  Plus, 
+  Filter,
+  Calendar,
+  Clock,
+  FileText,
+  MoreHorizontal 
+} from 'lucide-react'
+import { Badge } from "@/components/ui/badge"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { PageHeader } from "@/components/page-header"
+import { cn } from "@/lib/utils"
 
 export default function UnitTeachingPage() {
-  const [units, setUnits] = useState<TeachingUnit[]>([])
-  const [plans, setPlans] = useState<TeachingPlan[]>([])
-  const [activeTab, setActiveTab] = useState('unit')
-  const router = useRouter()
-
-  useEffect(() => {
-    loadData()
-  }, [])
-
-  const loadData = async () => {
-    try {
-      // 获取当前用户
-      const userStr = localStorage.getItem('user')
-      if (!userStr) {
-        router.push('/login')
-        return
-      }
-      const user = JSON.parse(userStr)
-
-      // 获取教学单元（只获取当前教师的单元）
-      const unitsResponse = await fetch(`http://localhost:3100/teachingUnits?teacherId=${user.id}`)
-      const unitsData = await unitsResponse.json()
-      setUnits(unitsData)
-
-      // 获取教案（只获取当前教师的教案）
-      const plansResponse = await fetch(`http://localhost:3100/teachingPlans?createdBy=${user.id}`)
-      const plansData = await plansResponse.json()
-      setPlans(plansData)
-    } catch (error) {
-      console.error('加载数据失败:', error)
-      toast({
-        title: "加载失败",
-        description: "获取教学数据失败",
-        variant: "destructive",
-      })
-    }
-  }
-
-  const handlePreview = (plan: TeachingPlan) => {
-    toast({
-      title: "预览功能",
-      description: "文件预览功能开发中",
-    })
-  }
-
-  const handleCreateUnit = () => {
-    toast({
-      title: "创建功能",
-      description: "创建单元教案功能开发中",
-    })
-  }
-
-  const handleCreatePlan = () => {
-    toast({
-      title: "创建功能",
-      description: "创建独立教案功能开发中",
-    })
-  }
-
-  const handleUnitClick = (unitId: number) => {
-    router.push(`/dashboard/unit-teaching/unit/${unitId}`)
-  }
-
-  const handlePlanClick = (planId: number) => {
-    router.push(`/dashboard/unit-teaching/plan/${planId}`)
-  }
+  const [activeTab, setActiveTab] = useState('units')
+  const [searchQuery, setSearchQuery] = useState('')
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold">单元教学管理</h1>
-        <p className="text-muted-foreground">管理教学单元和教案</p>
-      </div>
-
-      <Tabs defaultValue="unit" className="space-y-4" onValueChange={setActiveTab}>
-        <TabsList>
-          <TabsTrigger value="unit">单元教案</TabsTrigger>
-          <TabsTrigger value="single">独立教案</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="unit" className="space-y-4">
-          <div className="flex justify-end">
-            <Button onClick={handleCreateUnit}>
+    <div className="container mx-auto py-8 space-y-8">
+      <PageHeader
+        title="单元教学管理"
+        description="管理教学单元、课时和教案"
+        icon={BookOpen}
+        className="bg-white/50"
+        action={
+          <div className="flex items-center gap-4">
+            <Button 
+              variant="outline"
+              size="sm"
+              className={cn(
+                "bg-white/50 hover:bg-white/80",
+                "transition-all duration-300"
+              )}
+            >
+              <Filter className="h-4 w-4 mr-2" />
+              筛选
+            </Button>
+            <Button
+              className={cn(
+                "bg-gradient-to-r from-primary to-primary/90",
+                "hover:from-primary/90 hover:to-primary",
+                "transition-all duration-300",
+                "shadow-lg shadow-primary/20"
+              )}
+            >
               <Plus className="h-4 w-4 mr-2" />
-              创建单元教案
+              新建单元
             </Button>
           </div>
+        }
+      />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {units.map(unit => (
-              <Card 
-                key={unit.id} 
-                className="cursor-pointer hover:shadow-md transition-shadow"
-                onClick={() => handleUnitClick(unit.id)}
-              >
-                <CardHeader>
-                  <CardTitle>{unit.name}</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <p className="text-sm text-muted-foreground">{unit.description}</p>
-                    <div className="text-sm text-muted-foreground mt-2">
-                      {unit.subject} | {unit.grade}
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <div className="font-medium text-sm">关联教案</div>
-                    {plans
-                      .filter(plan => plan.unitId === unit.id)
-                      .map(plan => (
-                        <div key={plan.id} className="flex items-center justify-between p-3 border rounded-lg">
-                          <div className="flex items-center gap-3">
-                            <FileIcon className="h-5 w-5 text-muted-foreground" />
-                            <div>
-                              <h4 className="font-medium">{plan.name}</h4>
-                              <p className="text-sm text-muted-foreground">
-                                上传时间：{new Date(plan.uploadedAt).toLocaleString()}
-                              </p>
-                            </div>
-                          </div>
-                          <Button variant="outline" size="sm" onClick={() => handlePreview(plan)}>
-                            预览
-                          </Button>
+      <Card className="overflow-hidden border-none shadow-md">
+        <CardContent className="p-6">
+          <Tabs defaultValue="units" className="space-y-6" onValueChange={setActiveTab}>
+            <div className="flex items-center justify-between">
+              <TabsList>
+                <TabsTrigger value="units">教学单元</TabsTrigger>
+                <TabsTrigger value="lessons">课时管理</TabsTrigger>
+                <TabsTrigger value="plans">教案库</TabsTrigger>
+              </TabsList>
+              <div className="flex items-center space-x-2">
+                <div className="relative w-64">
+                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  <Input
+                    placeholder="搜索..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-9 bg-white/50"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <TabsContent value="units" className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {Array.from({length: 6}).map((_, i) => (
+                  <Card key={i} className={cn(
+                    "group transition-all duration-200",
+                    "hover:shadow-md hover:scale-[1.02]",
+                    "border border-border/50"
+                  )}>
+                    <CardContent className="p-6">
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <h3 className="font-medium">第{i + 1}单元</h3>
+                          <p className="text-sm text-muted-foreground mt-1">
+                            {['语文', '数学', '英语'][i % 3]} | 三年级上学期
+                          </p>
                         </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </TabsContent>
-
-        <TabsContent value="single" className="space-y-4">
-          <div className="flex justify-end">
-            <Button onClick={handleCreatePlan}>
-              <Plus className="h-4 w-4 mr-2" />
-              创建独立教案
-            </Button>
-          </div>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>独立教案列表</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {plans
-                .filter(plan => plan.unitId === null)
-                .map(plan => (
-                  <div 
-                    key={plan.id} 
-                    className="flex items-center justify-between p-4 border rounded-lg cursor-pointer hover:bg-slate-50"
-                    onClick={() => handlePlanClick(plan.id)}
-                  >
-                    <div className="flex items-center gap-3">
-                      <FileIcon className="h-5 w-5 text-muted-foreground" />
-                      <div>
-                        <h4 className="font-medium">{plan.name}</h4>
-                        <p className="text-sm text-muted-foreground">
-                          上传时间：{new Date(plan.uploadedAt).toLocaleString()}
-                        </p>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem>编辑单元</DropdownMenuItem>
+                            <DropdownMenuItem>查看详情</DropdownMenuItem>
+                            <DropdownMenuItem className="text-destructive">
+                              删除
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </div>
-                    </div>
-                    <Button variant="outline">预览</Button>
-                  </div>
-              ))}
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+
+                      <div className="mt-4 space-y-2">
+                        <div className="flex items-center text-sm text-muted-foreground">
+                          <Calendar className="h-4 w-4 mr-2" />
+                          2024-03-01 至 2024-03-15
+                        </div>
+                        <div className="flex items-center text-sm text-muted-foreground">
+                          <Clock className="h-4 w-4 mr-2" />
+                          12课时
+                        </div>
+                        <div className="flex items-center text-sm text-muted-foreground">
+                          <FileText className="h-4 w-4 mr-2" />
+                          8个教案
+                        </div>
+                      </div>
+
+                      <div className="mt-4 flex items-center gap-2">
+                        <Badge variant="outline" className="bg-white">
+                          进行中
+                        </Badge>
+                        <Badge variant="outline" className="bg-white">
+                          重点单元
+                        </Badge>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="lessons">
+              <div className="text-center py-8 text-muted-foreground">
+                课时管理功能开发中...
+              </div>
+            </TabsContent>
+
+            <TabsContent value="plans">
+              <div className="text-center py-8 text-muted-foreground">
+                教案库功能开发中...
+              </div>
+            </TabsContent>
+          </Tabs>
+        </CardContent>
+      </Card>
     </div>
   )
 } 

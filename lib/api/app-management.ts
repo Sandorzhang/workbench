@@ -1,5 +1,5 @@
 import { API_BASE_URL } from './config'
-import type { Application } from './auth'
+import type { Application } from '@/lib/api/auth'
 
 // 导出接口定义
 export interface RolePermission {
@@ -44,11 +44,13 @@ export async function updateRolePermissions(tenantId: number, roleId: string, ap
   const tenantAppResponse = await fetch(`${API_BASE_URL}/tenantApplications?tenantId=${tenantId}`)
   if (!tenantAppResponse.ok) throw new Error('Failed to fetch tenant applications')
   const tenantAppData = await tenantAppResponse.json()
-  const allApps = tenantAppData[0]?.applications || []
+  const allApps: Application[] = tenantAppData[0]?.applications || []
 
   // 如果不是管理员角色，过滤掉管理员专属应用
   if (roleId !== 'ADMIN') {
-    const nonAdminApps = allApps.filter(app => !app.adminOnly).map(app => app.id)
+    const nonAdminApps = allApps
+      .filter((app: Application) => !app.adminOnly)
+      .map((app: Application) => app.id)
     applications = applications.filter(appId => nonAdminApps.includes(appId))
   }
 
@@ -73,27 +75,35 @@ export async function fetchUserPermissions(tenantId: number): Promise<UserPermis
     // 1. 获取所有用户
     const users = await fetchTenantUsers(tenantId)
     
-    // 2. 获取用户权限配置
-    const response = await fetch(`${API_BASE_URL}/userApplications?tenantId=${tenantId}`)
-    if (!response.ok) throw new Error('Failed to fetch user permissions')
-    const permissions = await response.json()
+    // 2. 获取所有应用和权限记录
+    const [tenantAppResponse, userAppResponse] = await Promise.all([
+      fetch(`${API_BASE_URL}/tenantApplications?tenantId=${tenantId}`),
+      fetch(`${API_BASE_URL}/userApplications?tenantId=${tenantId}`)
+    ])
+
+    if (!tenantAppResponse.ok || !userAppResponse.ok) {
+      throw new Error('Failed to fetch applications')
+    }
+
+    const tenantAppData = await tenantAppResponse.json()
+    const allApps = tenantAppData[0]?.applications || []
+    const permissions = await userAppResponse.json()
 
     // 3. 为每个用户创建权限记录
     return users
-      .filter(user => user.role === 'TEACHER') // 只显示教师用户
-      .map(user => {
+      .filter((user: { role: string }) => user.role === 'TEACHER') // 只显示教师用户
+      .map((user: { id: number }) => {
         const permission = permissions.find((p: any) => p.userId === user.id)
         return {
           id: permission?.id || 0,
           userId: user.id,
           user,
-          applicationIds: permission?.applicationIds || [],
-          tenantId
+          applicationIds: permission?.applicationIds || []
         }
       })
   } catch (error) {
     console.error('Error fetching user permissions:', error)
-    return []
+    throw error
   }
 }
 
@@ -101,26 +111,30 @@ export async function fetchUserPermissions(tenantId: number): Promise<UserPermis
 export async function updateUserPermissions(userId: number, applications: number[]) {
   try {
     // 1. 获取用户信息和角色权限
-    const [userResponse, roleResponse] = await Promise.all([
+    const [userResponse, roleResponse, tenantAppResponse] = await Promise.all([
       fetch(`${API_BASE_URL}/users/${userId}`),
-      fetch(`${API_BASE_URL}/rolePermissions`)
+      fetch(`${API_BASE_URL}/rolePermissions`),
+      fetch(`${API_BASE_URL}/tenantApplications`)
     ])
 
-    if (!userResponse.ok || !roleResponse.ok) {
+    if (!userResponse.ok || !roleResponse.ok || !tenantAppResponse.ok) {
       throw new Error('Failed to fetch required data')
     }
 
     const user = await userResponse.json()
     const rolePermissions = await roleResponse.json()
+    const tenantAppData = await tenantAppResponse.json()
+    const allApps: Application[] = tenantAppData[0]?.applications || []
     const rolePermission = rolePermissions.find((r: RolePermission) => r.roleId === user.role)
 
     if (!rolePermission) {
       throw new Error('Role permissions not found')
     }
 
-    // 2. 确保应用权限在角色权限范围内
+    // 2. 确保应用权限在角色权限范围内，并过滤掉管理员专属应用
     const validApplications = applications.filter(appId => 
-      rolePermission.applications.includes(appId)
+      rolePermission.applications.includes(appId) && 
+      !allApps.find((app: Application) => app.id === appId && app.adminOnly)
     )
 
     // 3. 检查是否已有权限记录

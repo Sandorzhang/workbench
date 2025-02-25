@@ -6,7 +6,7 @@ import { redirect } from "next/navigation"
 import { fetchClassroomMoments } from "@/lib/api/classroom-moments"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Heart, MessageCircle, Search, Plus, XCircle } from "lucide-react"
+import { Heart, MessageCircle, Search, Plus, XCircle, Camera, Filter } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { Input } from "@/components/ui/input"
@@ -14,6 +14,9 @@ import { Button } from "@/components/ui/button"
 import { useDebounce } from "@/hooks/use-debounce"
 import { UploadDialog } from "@/components/classroom-moments/upload-dialog"
 import { SUBJECTS } from "@/lib/constants/subjects"
+import { useToast } from "@/hooks/use-toast"
+import { PageHeader } from "@/components/page-header"
+import { cn } from "@/lib/utils"
 
 interface ClassroomMoment {
   id: string
@@ -41,6 +44,7 @@ export default function ClassroomMomentsPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false)
   const debouncedSearchTerm = useDebounce(searchTerm, 300)
+  const { toast } = useToast()
 
   useEffect(() => {
     const loadData = async () => {
@@ -50,6 +54,11 @@ export default function ClassroomMomentsPage() {
         setFilteredMoments(data)
       } catch (error) {
         console.error('Failed to fetch moments:', error)
+        toast({
+          variant: "destructive",
+          title: "错误",
+          description: "加载课堂实录失败"
+        })
       }
     }
     loadData()
@@ -88,19 +97,40 @@ export default function ClassroomMomentsPage() {
   }, [moments, selectedSubject, debouncedSearchTerm])
 
   return (
-    <div className="container mx-auto py-8 space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">课堂时光机</h1>
-          <p className="text-sm text-muted-foreground mt-1">
-            记录和分享精彩课堂瞬间
-          </p>
-        </div>
-        <Button onClick={() => setUploadDialogOpen(true)} className="gap-2">
-          <Plus className="h-4 w-4" />
-          上传课堂实录
-        </Button>
-      </div>
+    <div className="container mx-auto py-8 space-y-8">
+      <PageHeader
+        title="课堂时光机"
+        description="记录和分享精彩课堂瞬间"
+        icon={Camera}
+        className="bg-white/50"
+        action={
+          <div className="flex items-center gap-4">
+            <Button 
+              variant="outline"
+              size="sm"
+              className={cn(
+                "bg-white/50 hover:bg-white/80",
+                "transition-all duration-300"
+              )}
+            >
+              <Filter className="h-4 w-4 mr-2" />
+              筛选
+            </Button>
+            <Button
+              onClick={() => setUploadDialogOpen(true)}
+              className={cn(
+                "bg-gradient-to-r from-primary to-primary/90",
+                "hover:from-primary/90 hover:to-primary",
+                "transition-all duration-300",
+                "shadow-lg shadow-primary/20"
+              )}
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              上传课堂实录
+            </Button>
+          </div>
+        }
+      />
 
       {/* 搜索和筛选区 */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">

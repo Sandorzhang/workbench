@@ -6,10 +6,13 @@ import { Button } from "@/components/ui/button"
 import { GradeSelector } from "@/components/class-schedule/grade-selector"
 import { ClassSelector } from "@/components/class-schedule/class-selector"
 import { useAuth } from "@/hooks/use-auth"
-import { BarChart, Download, Medal } from "lucide-react"
+import { BarChart, Download, Medal, Filter, FileBarChart } from "lucide-react"
 import { fetchClassModel, type ClassModel } from "@/lib/api/class-model"
 import { useToast } from "@/hooks/use-toast"
 import { PageContainer } from "@/components/dashboard/page-container"
+import { PageHeader } from "@/components/page-header"
+import { cn } from "@/lib/utils"
+import { Badge } from "@/components/ui/badge"
 
 const LEVEL_COLORS = {
   "发展中": "bg-red-500",
@@ -26,6 +29,7 @@ export default function ClassModelPage() {
   const [loading, setLoading] = useState(false)
   const { user, hasPermission } = useAuth()
   const { toast } = useToast()
+  const [classModels, setClassModels] = useState([])
 
   const canExport = hasPermission('export_class_model')
 
@@ -33,6 +37,14 @@ export default function ClassModelPage() {
     if (!selectedGrade || !selectedClass) return
     loadModelData()
   }, [selectedGrade, selectedClass])
+
+  useEffect(() => {
+    // 从 mock API 获取数据
+    fetch('http://localhost:3100/classModels')
+      .then(res => res.json())
+      .then(data => setClassModels(data))
+      .catch(err => console.error('加载数据失败:', err))
+  }, [])
 
   const loadModelData = async () => {
     try {
@@ -66,6 +78,39 @@ export default function ClassModelPage() {
 
   return (
     <PageContainer>
+      <PageHeader
+        title="班级模型"
+        description="查看班级发展模型分析报告"
+        icon={BarChart}
+        className="bg-white/50 mb-6"
+        action={
+          <div className="flex items-center gap-4">
+            <Button 
+              variant="outline"
+              size="sm"
+              className={cn(
+                "bg-white/50 hover:bg-white/80",
+                "transition-all duration-300"
+              )}
+            >
+              <Filter className="h-4 w-4 mr-2" />
+              筛选
+            </Button>
+            <Button
+              className={cn(
+                "bg-gradient-to-r from-primary to-primary/90",
+                "hover:from-primary/90 hover:to-primary",
+                "transition-all duration-300",
+                "shadow-lg shadow-primary/20"
+              )}
+            >
+              <FileBarChart className="h-4 w-4 mr-2" />
+              生成报告
+            </Button>
+          </div>
+        }
+      />
+
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">班级模型报告</h1>
@@ -193,6 +238,32 @@ export default function ClassModelPage() {
           请选择年级和班级查看模型报告
         </div>
       )}
+
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {classModels.map((model: any) => (
+          <Card key={model.id} className={cn(
+            "transition-all duration-200",
+            "hover:shadow-md hover:-translate-y-0.5"
+          )}>
+            <CardHeader>
+              <CardTitle className="flex items-center justify-between">
+                <span>{model.grade}{model.class}</span>
+                <Badge variant="outline">{model.lastUpdated}</Badge>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <div className="grid grid-cols-2 gap-2 text-sm">
+                <div className="text-muted-foreground">班主任</div>
+                <div>{model.headTeacher}</div>
+                <div className="text-muted-foreground">学生人数</div>
+                <div>{model.studentCount}人</div>
+                <div className="text-muted-foreground">发展水平</div>
+                <div>{model.developmentLevel}</div>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
     </PageContainer>
   )
 } 

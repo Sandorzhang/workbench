@@ -6,7 +6,7 @@ export interface Application {
   name: string
   description: string
   icon: string
-  adminOnly: boolean
+  adminOnly?: boolean
 }
 
 export async function fetchUserApplications(): Promise<Application[]> {

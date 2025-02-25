@@ -16,14 +16,16 @@ import { fetchCurrentTenant } from "@/lib/api/tenant"
 import type { Tenant } from "@/lib/api/tenant"
 import { useAuth } from "@/hooks/use-auth"
 import { fetchUserApplications } from "@/lib/api/auth"
+import type { Application } from "@/lib/api/auth"
 import { cn } from "@/lib/utils"
+import { PageHeader } from "@/components/page-header"
 
 // 应用分类定义
 const APP_CATEGORIES = {
   teaching: {
     name: '智能教学',
     description: '课程、教案和教学资源管理',
-    apps: ['unit-teaching', 'chinese-writing', 'classroom-moments']
+    apps: ['unit-teaching', 'chinese-writing', 'classroom-moments'] as const
   },
   analysis: {
     name: '智能分析',
@@ -38,7 +40,7 @@ const APP_CATEGORIES = {
   base: {
     name: '基础管理',
     description: '系统基础功能管理',
-    apps: ['app-management', 'student-management', 'class-schedule', 'data-category']
+    apps: ['app-management', 'student-management', 'teacher-management', 'class-schedule', 'data-category']
   }
 } as const
 
@@ -50,26 +52,52 @@ const CATEGORY_COLORS: Record<string, { text: string, bg: string }> = {
   'base': { text: "text-slate-600", bg: "bg-slate-50" }
 }
 
-interface Application {
-  id: number
-  code: string
-  name: string
-  description: string
-  icon: string
-}
-
 // 应用图标映射
-const APP_ICONS: Record<string, LucideIcon> = {
-  'app-management': Settings,
-  'unit-teaching': BookOpen,
-  'academic-journey': GraduationCap,
-  'chinese-writing': PenTool,
-  'classroom-moments': Camera,
-  'class-schedule': Calendar,
-  'data-category': Database,
-  'class-model': BarChart,
-  'situational-assessment': Target,
-  'student-management': Users
+const APP_ICONS: Record<string, { icon: LucideIcon, colors: { text: string, bg: string } }> = {
+  'app-management': {
+    icon: Settings,
+    colors: CATEGORY_COLORS.base
+  },
+  'unit-teaching': {
+    icon: BookOpen,
+    colors: CATEGORY_COLORS.teaching
+  },
+  'academic-journey': {
+    icon: GraduationCap,
+    colors: CATEGORY_COLORS.analysis
+  },
+  'chinese-writing': {
+    icon: PenTool,
+    colors: CATEGORY_COLORS.teaching
+  },
+  'classroom-moments': {
+    icon: Camera,
+    colors: CATEGORY_COLORS.teaching
+  },
+  'class-schedule': {
+    icon: Calendar,
+    colors: CATEGORY_COLORS.base
+  },
+  'data-category': {
+    icon: Database,
+    colors: CATEGORY_COLORS.base
+  },
+  'class-model': {
+    icon: BarChart,
+    colors: CATEGORY_COLORS.analysis
+  },
+  'situational-assessment': {
+    icon: Target,
+    colors: CATEGORY_COLORS.evaluation
+  },
+  'student-management': {
+    icon: Users,
+    colors: CATEGORY_COLORS.base
+  },
+  'teacher-management': {
+    icon: GraduationCap,
+    colors: CATEGORY_COLORS.base
+  }
 }
 
 // 应用所属分类映射
@@ -83,7 +111,8 @@ const APP_CATEGORIES_MAP: Record<string, string> = {
   'app-management': 'base',
   'student-management': 'base',
   'class-schedule': 'base',
-  'data-category': 'base'
+  'data-category': 'base',
+  'teacher-management': 'base'
 }
 
 export default function DashboardPage() {
@@ -136,19 +165,25 @@ export default function DashboardPage() {
       id,
       name: category.name,
       description: category.description,
-      apps: applications.filter(app => category.apps.includes(app.code))
+      apps: applications.filter((app: Application) => 
+        typeof app.code === 'string' && 
+        (category.apps as readonly string[]).includes(app.code)
+      )
     }))
     .filter(category => category.apps.length > 0)
 
   // 获取应用的图标和颜色
   const getAppIconAndColor = (appCode: string) => {
-    const Icon = APP_ICONS[appCode]
+    const { icon: Icon, colors } = APP_ICONS[appCode]
     const categoryId = APP_CATEGORIES_MAP[appCode]
-    const colors = CATEGORY_COLORS[categoryId] || CATEGORY_COLORS.base
+    const categoryColors = CATEGORY_COLORS[categoryId] || CATEGORY_COLORS.base
 
     return {
       icon: Icon ? <Icon className={cn("h-5 w-5", colors.text)} /> : null,
-      colors
+      colors: {
+        ...categoryColors,
+        ...colors
+      }
     }
   }
 
@@ -158,15 +193,11 @@ export default function DashboardPage() {
       <div className="absolute inset-0 bg-grid-black/[0.02] -z-10" />
       <div className="absolute inset-0 bg-gradient-to-b from-white/80 to-white/30 backdrop-blur-3xl -z-10" />
 
-      <div className="relative">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-50/80 to-violet-50/80 rounded-2xl backdrop-blur-sm" />
-        <div className="relative p-6 md:p-8">
-          <h1 className="text-3xl font-bold tracking-tight">工作台</h1>
-          <p className="text-sm text-muted-foreground mt-1">
-            欢迎使用{tenant?.name || '教学管理平台'}
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        title="工作台"
+        description={`欢迎使用${tenant?.name || '教学管理平台'}`}
+        icon={Layers}
+      />
 
       {categorizedApps.map((category) => (
         <div key={category.id} className="space-y-4">

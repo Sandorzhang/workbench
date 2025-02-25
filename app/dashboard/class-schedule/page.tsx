@@ -10,7 +10,8 @@ import { GradeSelector } from "@/components/class-schedule/grade-selector"
 import { ClassSelector } from "@/components/class-schedule/class-selector"
 import { useAuth } from "@/hooks/use-auth"
 import { useRouter } from "next/navigation"
-import { PageContainer } from "@/components/dashboard/page-container"
+import { PageHeader } from "@/components/page-header"
+import { cn } from "@/lib/utils"
 
 export default function ClassSchedulePage() {
   const [selectedTab, setSelectedTab] = useState<"teacher" | "class">("teacher")
@@ -24,36 +25,49 @@ export default function ClassSchedulePage() {
   const canExport = hasPermission('export_schedule')
 
   return (
-    <PageContainer>
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">课表管理</h1>
-          <p className="text-sm text-muted-foreground mt-1">
-            管理课程表
-          </p>
-        </div>
-        <div className="flex items-center gap-4">
-          {selectedTab === "class" && (
-            <>
-              <GradeSelector value={selectedGrade} onChange={setSelectedGrade} />
-              <ClassSelector value={selectedClass} onChange={setSelectedClass} />
-            </>
-          )}
-          {canManageSettings && (
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={() => router.push('/dashboard/class-schedule/settings')}
-            >
-              <Settings className="h-4 w-4 mr-2" />
-              基础设置
-            </Button>
-          )}
-          {canExport && (
-            <Button>导出课表</Button>
-          )}
-        </div>
-      </div>
+    <div className="container mx-auto py-8 space-y-8">
+      <PageHeader
+        title="课表管理"
+        description="管理学校课程表和时间安排"
+        icon={Calendar}
+        className="bg-white/50"
+        action={
+          <div className="flex items-center gap-4">
+            {selectedTab === "class" && (
+              <>
+                <GradeSelector value={selectedGrade} onChange={setSelectedGrade} />
+                <ClassSelector value={selectedClass} onChange={setSelectedClass} />
+              </>
+            )}
+            {canManageSettings && (
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => router.push('/dashboard/class-schedule/settings')}
+                className={cn(
+                  "bg-white/50 hover:bg-white/80",
+                  "transition-all duration-300"
+                )}
+              >
+                <Settings className="h-4 w-4 mr-2" />
+                基础设置
+              </Button>
+            )}
+            {canExport && (
+              <Button
+                className={cn(
+                  "bg-gradient-to-r from-primary to-primary/90",
+                  "hover:from-primary/90 hover:to-primary",
+                  "transition-all duration-300",
+                  "shadow-lg shadow-primary/20"
+                )}
+              >
+                导出课表
+              </Button>
+            )}
+          </div>
+        }
+      />
 
       <Card className="bg-white/70 backdrop-blur-sm border-white/50">
         <CardHeader>
@@ -81,6 +95,6 @@ export default function ClassSchedulePage() {
           />
         </CardContent>
       </Card>
-    </PageContainer>
+    </div>
   )
 } 
