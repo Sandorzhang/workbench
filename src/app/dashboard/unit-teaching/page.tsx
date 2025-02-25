@@ -1,10 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/common/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/common/ui/tabs"
+import { Button } from "@/components/common/ui/button"
+import { Input } from "@/components/common/ui/input"
 import { 
   BookOpen, 
   Search, 
@@ -15,14 +15,14 @@ import {
   FileText,
   MoreHorizontal 
 } from 'lucide-react'
-import { Badge } from "@/components/ui/badge"
+import { Badge } from "@/components/common/ui/badge"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { PageHeader } from "@/components/page-header"
+} from "@/components/common/ui/dropdown-menu"
+import { PageHeader } from "@/components/common/layout/page-header"
 import { cn } from "@/lib/types/utils"
 
 export default function UnitTeachingPage() {

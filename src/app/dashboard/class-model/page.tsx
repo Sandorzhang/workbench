@@ -1,18 +1,18 @@
 'use client'
 
 import { useState, useEffect } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { GradeSelector } from "@/components/class-schedule/grade-selector"
-import { ClassSelector } from "@/components/class-schedule/class-selector"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/common/ui/card"
+import { Button } from "@/components/common/ui/button"
+import { GradeSelector } from "@/components/features/class-schedule/grade-selector"
+import { ClassSelector } from "@/components/features/class-schedule/class-selector"
 import { useAuth } from "@/hooks/use-auth"
 import { BarChart, Download, Medal, Filter, FileBarChart } from "lucide-react"
 import { fetchClassModel, type ClassModel } from "@/lib/api/class-model"
 import { useToast } from "@/hooks/use-toast"
-import { PageContainer } from "@/components/dashboard/page-container"
-import { PageHeader } from "@/components/page-header"
+import { PageContainer } from "@/components/features/dashboard/page-container"
+import { PageHeader } from "@/components/common/layout/page-header"
 import { cn } from "@/lib/types/utils"
-import { Badge } from "@/components/ui/badge"
+import { Badge } from "@/components/common/ui/badge"
 
 const LEVEL_COLORS = {
   "发展中": "bg-red-500",

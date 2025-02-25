@@ -1,12 +1,12 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/common/ui/card"
+import { Badge } from "@/components/common/ui/badge"
 import Link from "next/link"
-import { PageHeader } from "@/components/page-header"
+import { PageHeader } from "@/components/common/layout/page-header"
 import { GraduationCap, Filter, LineChart } from 'lucide-react'
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/common/ui/button"
 import { cn } from "@/lib/types/utils"
 
 export default function AcademicJourneyPage() {
