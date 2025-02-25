@@ -7,6 +7,54 @@ const middlewares = jsonServer.defaults();
 // 设置中间件
 server.use(middlewares);
 
+// 添加请求体解析中间件
+server.use(jsonServer.bodyParser);
+
+// 添加请求日志中间件
+server.use((req, res, next) => {
+  console.log(`${req.method} ${req.path}`);
+  next();
+});
+
+// 自定义响应处理 - 放在路由重写之前
+server.use((req, res, next) => {
+  // 处理登录请求 - 同时处理 /api/auth/login 和 /auth/login 路径
+  if (req.method === 'POST' && (req.path === '/api/auth/login' || req.path === '/auth/login')) {
+    console.log('Login request received:', req.body);
+    
+    const { username, password } = req.body;
+    
+    // 确保 db.users 存在
+    if (!db.users || !Array.isArray(db.users)) {
+      console.error('Users data not found or not an array');
+      return res.status(500).json({ error: '服务器内部错误' });
+    }
+    
+    console.log(`Attempting login with username: ${username}`);
+    console.log(`Available users:`, db.users.map(u => u.username));
+    
+    const user = db.users.find(
+      u => u.username === username && u.password === password
+    );
+    
+    if (user) {
+      console.log(`User found: ${user.name} (${user.role})`);
+      return res.json({
+        id: user.id,
+        name: user.name,
+        username: user.username,
+        role: user.role,
+        avatar: user.avatar
+      });
+    } else {
+      console.log('User not found or password incorrect');
+      return res.status(401).json({ error: '用户名或密码错误' });
+    }
+  }
+  
+  next();
+});
+
 // 加载路由配置
 const routes = JSON.parse(fs.readFileSync(path.join(__dirname, 'routes.json')));
 server.use(jsonServer.rewriter(routes));
@@ -95,7 +143,7 @@ console.log('Users data:', db.users ? `${db.users.length} users found` : 'No use
 const router = jsonServer.router(db);
 server.use(router);
 
-// 自定义响应
+// 其他自定义响应处理
 server.use((req, res, next) => {
   if (req.method === 'GET' && req.path.startsWith('/moments/')) {
     const id = req.path.split('/').pop();

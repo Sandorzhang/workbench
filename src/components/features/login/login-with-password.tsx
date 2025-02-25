@@ -18,6 +18,7 @@ import * as z from "zod"
 import { authApi } from '@/lib/api/auth'
 import { toast } from "@/components/common/ui/use-toast"
 import { signIn } from "next-auth/react"
+import { toast as sonnerToast } from 'sonner'
 
 // 定义表单验证规则
 const formSchema = z.object({
@@ -58,10 +59,9 @@ export function LoginWithPassword() {
       router.push('/dashboard');
     } catch (error) {
       console.error('Login error:', error);
-      toast({
-        title: "登录失败",
-        description: error instanceof Error ? error.message : "用户名或密码错误",
-        variant: "destructive",
+      
+      sonnerToast.error("登录失败", {
+        description: error instanceof Error ? error.message : "用户名或密码错误"
       });
     } finally {
       setIsLoading(false);

@@ -73,5 +73,6 @@
   "/chinese-writing/units/:id": "/units/:id",
   "/chinese-writing/units/:unitId/records": "/records?unitId=:unitId",
   "/api/classroomMoments": "/moments",
-  "/api/classroomMoments/:id": "/moments/:id"
+  "/api/classroomMoments/:id": "/moments/:id",
+  "/api/auth/login": "/auth/login"
 } 

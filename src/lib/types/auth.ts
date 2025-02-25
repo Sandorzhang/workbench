@@ -55,6 +55,9 @@ export function hasRole(session: Session | null, roles: string[]): boolean {
 }
 
 // 确保 NextAuth 配置正确
+console.log('NEXTAUTH_URL:', process.env.NEXTAUTH_URL);
+console.log('NEXTAUTH_SECRET exists:', !!process.env.NEXTAUTH_SECRET);
+
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -71,8 +74,8 @@ export const authOptions: NextAuthOptions = {
           
           console.log(`NextAuth authorize: username=${credentials.username}`);
           
-          // 调用登录 API
-          const response = await fetch(`${process.env.NEXTAUTH_URL}/api/auth/login`, {
+          // 使用相对路径而不是环境变量
+          const response = await fetch(`/api/auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

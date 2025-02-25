@@ -5,52 +5,42 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { username, password } = body;
 
-    console.log(`Login attempt: username=${username}`);
+    console.log(`API route: Login attempt with username=${username}`);
 
     // 调用 json-server 验证用户
-    const response = await fetch('http://localhost:3100/users', {
-      headers: {
-        'Content-Type': 'application/json',
-      },
+    const response = await fetch('http://localhost:3100/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password }),
     });
+
+    console.log(`API route: Response status from json-server: ${response.status}`);
 
     if (!response.ok) {
-      console.error(`Failed to fetch users: ${response.status}`);
+      const errorText = await response.text();
+      console.error(`API route: Error response from json-server: ${errorText}`);
+      
+      let errorObj;
+      try {
+        errorObj = JSON.parse(errorText);
+      } catch (e) {
+        errorObj = { error: '认证失败' };
+      }
+      
       return NextResponse.json(
-        { error: 'Failed to authenticate' },
-        { status: 500 }
+        { error: errorObj.error || '认证失败' },
+        { status: response.status }
       );
     }
 
-    const users = await response.json();
-    console.log(`Found ${users.length} users`);
-
-    const user = users.find(
-      (u: any) => u.username === username && u.password === password
-    );
-
-    if (!user) {
-      console.log('User not found or password incorrect');
-      return NextResponse.json(
-        { error: 'Invalid username or password' },
-        { status: 401 }
-      );
-    }
-
-    console.log(`User authenticated: ${user.name} (${user.role})`);
-
-    // 创建会话
-    return NextResponse.json({
-      id: user.id,
-      name: user.name,
-      username: user.username,
-      role: user.role,
-      avatar: user.avatar,
-    });
+    const user = await response.json();
+    console.log(`API route: User authenticated: ${user.name}`);
+    
+    return NextResponse.json(user);
   } catch (error) {
-    console.error('Login error:', error);
+    console.error('API route: Login error:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Internal Server Error' },
       { status: 500 }
     );
   }
