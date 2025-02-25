@@ -16,23 +16,27 @@ export interface AssessmentFramework {
   id: number
   name: string
   description: string
-  dimensions: AssessmentDimension[]
   status: 'draft' | 'published'
+  dimensions: AssessmentDimension[]
   createdAt: string
   updatedAt: string
 }
 
-export interface AssessmentTask {
-  id: number
-  title: string
-  grade: string
-  class: string
-  type: string
-  status: 'draft' | 'in_progress' | 'completed'
-  deadline: string
-  completionRate: number
-  frameworkId: number
-  framework?: AssessmentFramework
+export interface CreateFrameworkDto {
+  name: string
+  description: string
+  dimensions: Omit<AssessmentDimension, 'id'>[]
 }
 
-export type CreateAssessmentTaskDto = Omit<AssessmentTask, 'id' | 'status' | 'completionRate'> 
+export interface UpdateFrameworkDto {
+  name?: string
+  description?: string
+  status?: 'draft' | 'published'
+  dimensions?: Omit<AssessmentDimension, 'id'>[]
+}
+
+// 暂时注释掉任务相关的类型
+/*
+export interface AssessmentTask { ... }
+export interface CreateTaskDto { ... }
+*/ 

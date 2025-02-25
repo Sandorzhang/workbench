@@ -1,0 +1,34 @@
+/**
+ * Mock 数据文件
+ * 
+ * 功能：
+ * 1. 提供模拟数据
+ * 2. 支持评估框架的数据结构
+ * 3. 支持评估任务的数据结构
+ * 4. 支持学生相关的数据结构
+ * 
+ * 数据结构：
+ * - frameworks: 评估框架数据
+ * - tasks: 评估任务数据
+ * - students: 学生数据
+ * 
+ * 使用方式：
+ * - 由 json-server 自动加载
+ * - 支持 RESTful API 操作
+ */
+
+{
+  "frameworks": [
+    {
+      "id": 1,
+      "name": "示例框架",
+      "description": "这是一个示例评估框架",
+      "status": "draft",
+      "dimensions": [],
+      "createdAt": "2024-03-21T00:00:00Z",
+      "updatedAt": "2024-03-21T00:00:00Z"
+    }
+  ],
+  "tasks": [],
+  "students": []
+} 
